@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>SUPER NUMBER WORLD : THE PRICE ADVENTURE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#ff7ac0; --pink2:#ffb3dc; --lav:#a98bff; --lav2:#d6c8ff; --sky:#5cc8ff; --sky2:#b5e6ff;
+  --mint:#3fe0b0; --mint2:#b4f7e1; --yel:#ffd84d; --yel2:#fff1a8; --ink:#3a2770; --ink2:#6b5aa6;
+  --glass:rgba(255,255,255,.55); --glass2:rgba(255,255,255,.78);
+  --good:#2fd39a; --bad:#ff7d9c;
+  --r:28px;
+  --font:'Baloo 2','Jua','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;overflow:hidden;font-family:var(--font);color:var(--ink);touch-action:manipulation}
+body{background:#f6e9ff}
+button{font-family:inherit;color:inherit;border:0;cursor:pointer}
+.ko{font-family:'Jua',var(--font)}
+
+/* ---------- world background ---------- */
+#bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(1200px 700px at 10% 0%,#ffd6f0 0%,transparent 60%),
+  radial-gradient(900px 700px at 100% 10%,#c9e9ff 0%,transparent 60%),
+  radial-gradient(900px 800px at 50% 110%,#c8fff0 0%,transparent 60%),
+  linear-gradient(160deg,#fbe3ff,#e3e6ff 50%,#dcfbf3);transition:background .6s}
+#bg .tw{position:absolute;font-size:22px;opacity:.7;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0);opacity:.3}50%{transform:scale(1.1) rotate(20deg);opacity:.95}}
+body.calm #bg .tw{animation:none;opacity:.35}
+
+#app{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column}
+
+/* ---------- HUD ---------- */
+#hud{display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));flex:0 0 auto;z-index:5}
+.pill{display:flex;align-items:center;gap:6px;background:var(--glass2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,.9);border-radius:999px;padding:4px 14px 4px 6px;font-weight:800;font-size:22px;box-shadow:0 6px 18px rgba(120,80,200,.15);white-space:nowrap}
+.pill .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:linear-gradient(145deg,#fff,#ffe9a6)}
+.pill.bump{animation:bump .5s}
+@keyframes bump{30%{transform:scale(1.25)}60%{transform:scale(.95)}}
+.prog{width:120px;height:14px;border-radius:9px;background:rgba(160,130,255,.2);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--sky),var(--lav));border-radius:9px;transition:width .8s}
+#hud .sp{flex:1}
+.hudbtn{width:52px;height:52px;border-radius:50%;background:var(--glass2);border:2px solid #fff;font-size:26px;box-shadow:0 6px 16px rgba(120,80,200,.18)}
+#hudNumi{display:flex;align-items:center;gap:4px}
+#hudNumi svg{width:44px;height:44px}
+
+/* ---------- screens ---------- */
+#stage{position:relative;flex:1;min-height:0}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;animation:scrIn .45s cubic-bezier(.2,1.3,.4,1)}
+body.calm .screen{animation:fadeIn .3s}
+@keyframes scrIn{from{opacity:0;transform:scale(.94) translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.mhead{display:flex;align-items:center;gap:12px;padding:4px 16px 8px}
+.mhead h2{margin:0;font-size:34px;font-weight:800;letter-spacing:1px;flex:1;text-align:center;
+  background:linear-gradient(90deg,var(--pink),var(--lav),var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #fff)}
+.mbody{flex:1;min-height:0;position:relative;padding:0 18px 18px;display:flex;flex-direction:column}
+
+/* ---------- buttons ---------- */
+.btn{--c1:#ff9bd2;--c2:#ff6fb5;--sh:#d94b92;position:relative;border-radius:999px;padding:12px 26px;font-size:26px;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:0 7px 0 var(--sh),0 12px 22px rgba(90,40,160,.25),inset 0 3px 0 rgba(255,255,255,.5);
+  text-shadow:0 2px 0 rgba(0,0,0,.12);transition:transform .08s,box-shadow .08s;min-height:64px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:translateY(5px);box-shadow:0 2px 0 var(--sh),0 6px 12px rgba(90,40,160,.2),inset 0 3px 0 rgba(255,255,255,.5)}
+.btn.lav{--c1:#c3aeff;--c2:#9d7dff;--sh:#7254d6}
+.btn.sky{--c1:#9be0ff;--c2:#4ebcff;--sh:#2b8fd1}
+.btn.mint{--c1:#8ff5d2;--c2:#33d6a3;--sh:#1ea57c}
+.btn.yel{--c1:#ffe98a;--c2:#ffc93d;--sh:#d99c12;color:#6b4a00;text-shadow:none}
+.btn.white{--c1:#fff;--c2:#f3eeff;--sh:#cfc3f2;color:var(--ink);text-shadow:none}
+.btn.sm{font-size:20px;padding:8px 18px;min-height:52px}
+.btn.big{font-size:32px;padding:16px 36px;min-height:80px}
+.btn[disabled]{filter:grayscale(.7);opacity:.6;pointer-events:none}
+.round{width:64px;height:64px;padding:0;border-radius:50%;font-size:30px}
+.boing{animation:boing .45s}
+@keyframes boing{0%{transform:scale(1)}30%{transform:scale(1.15,.85)}55%{transform:scale(.92,1.08)}80%{transform:scale(1.03,.97)}100%{transform:scale(1)}}
+body.calm .boing{animation:none}
+
+/* ---------- glass card ---------- */
+.glass{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:3px solid rgba(255,255,255,.85);border-radius:var(--r);box-shadow:0 14px 40px rgba(110,70,200,.18)}
+.tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.tab{padding:6px 16px;border-radius:999px;font-size:19px;font-weight:800;background:rgba(255,255,255,.6);border:3px solid #fff;box-shadow:0 4px 0 rgba(150,120,220,.35);min-height:52px}
+.tab.on{background:linear-gradient(180deg,#fff7a8,#ffd84d);box-shadow:0 4px 0 #d9a514;transform:translateY(-2px)}
+.inst{font-size:26px;font-weight:800;text-align:center;margin:4px 0 10px}
+.inst .ko{font-size:22px;color:var(--ink2);font-weight:400;display:block}
+.safe>:first-child{margin-top:auto!important}.safe>:last-child{margin-bottom:auto!important}
+.center{display:flex;align-items:center;justify-content:center}
+.col{display:flex;flex-direction:column;align-items:center}
+.row{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+.grow{flex:1;min-height:0}
+
+/* ---------- number typography ---------- */
+.bignum{font-size:min(17vh,150px);font-weight:800;line-height:1;letter-spacing:2px;text-shadow:0 6px 0 #fff,0 12px 30px rgba(120,70,220,.3)}
+.bignum .d{display:inline-block;animation:numPop .6s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes numPop{0%{transform:scale(0) rotate(-20deg);opacity:0}100%{transform:none;opacity:1}}
+body.calm .bignum .d{animation:fadeIn .3s both}
+.d.th{color:#ff5fae}.d.h{color:#8c6bff}.d.r{color:#29a8f0}.d.cm{color:#b9a8e8}
+.words{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.w{font-size:34px;font-weight:800;padding:6px 16px;border-radius:18px;background:rgba(255,255,255,.75);border:3px solid #fff;box-shadow:0 5px 0 rgba(150,120,220,.3);text-transform:uppercase;transition:all .15s}
+.w.hl{background:linear-gradient(180deg,#fff59a,#ffd23f);transform:scale(1.15) translateY(-4px);box-shadow:0 8px 0 #e3a90f,0 0 30px #ffe680}
+.tag{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(180deg,#fffef0,#fff3b8);border:3px solid #ffd84d;border-radius:14px;padding:2px 12px;font-weight:800;font-size:24px;box-shadow:0 4px 0 #e5b623;color:#6b4a00;position:relative}
+.tag:before{content:'';width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #e5b623;margin-right:2px}
+
+/* choice cards */
+.choices{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));width:100%}
+.ch{color:var(--ink);background:linear-gradient(180deg,#fff,#f2ecff);border:4px solid #fff;border-radius:24px;padding:14px;font-size:30px;font-weight:800;box-shadow:0 7px 0 #c9b9f5,0 12px 24px rgba(110,70,200,.15);min-height:84px;transition:transform .1s}
+.ch:active{transform:translateY(4px);box-shadow:0 3px 0 #c9b9f5}
+.ch.wd{font-size:24px;text-transform:uppercase;line-height:1.15}
+.ch.ok{background:linear-gradient(180deg,#d4ffef,#8ff0cb);box-shadow:0 7px 0 #2fbf8a;animation:boing .5s}
+.ch.no{background:linear-gradient(180deg,#ffe1ea,#ffb5c8);box-shadow:0 7px 0 #e8799a}
+.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-10px) rotate(-2deg)}40%{transform:translateX(9px) rotate(2deg)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+
+/* ---------- main map ---------- */
+.map{flex:1;display:grid;grid-template-columns:1fr 1fr minmax(260px,1.15fr) 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:16px;padding:0 22px 22px;min-height:0}
+.title{grid-column:1/-1;text-align:center;font-size:min(8.2vh,64px);font-weight:800;margin:0;line-height:1;letter-spacing:2px;
+  background:linear-gradient(90deg,#ff5fae,#a079ff,#3fb8ff,#30d9a4,#ffbf1f);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 4px 0 #fff) drop-shadow(0 10px 18px rgba(130,80,230,.35));animation:titleFloat 4s ease-in-out infinite}
+.title small{display:block;font-size:.36em;letter-spacing:6px}
+@keyframes titleFloat{50%{transform:translateY(-6px)}}
+body.calm .title{animation:none}
+.tile{position:relative;border-radius:34px;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;overflow:hidden;
+  background:linear-gradient(160deg,var(--t1),var(--t2));border:4px solid rgba(255,255,255,.9);box-shadow:0 10px 0 var(--t3),0 18px 30px rgba(90,50,180,.25),inset 0 4px 0 rgba(255,255,255,.6);transition:transform .1s;min-height:0}
+.tile:active{transform:translateY(6px) scale(.98);box-shadow:0 4px 0 var(--t3)}
+.tile .em{font-size:min(9vh,72px);filter:drop-shadow(0 8px 6px rgba(0,0,0,.18));animation:floaty 3s ease-in-out infinite}
+.tile:nth-child(odd) .em{animation-delay:-1.5s}
+@keyframes floaty{50%{transform:translateY(-8px) rotate(4deg)}}
+body.calm .tile .em{animation:none}
+.tile b{font-size:min(3.3vh,1.8vw,25px);font-weight:800;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.18),0 0 10px rgba(0,0,0,.08);letter-spacing:.5px;text-align:center;line-height:1}
+.tile span{font-size:min(2.5vh,18px);color:rgba(255,255,255,.95);font-family:'Jua'}
+.tile:after{content:'';position:absolute;top:-30%;left:-20%;width:60%;height:80%;background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent);transform:rotate(-20deg)}
+.tile .no{position:absolute;top:8px;left:12px;font-weight:800;color:rgba(255,255,255,.9);font-size:18px}
+.mapNumi{grid-column:3;grid-row:2/4;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.bubble{background:#fff;border-radius:26px;padding:12px 20px;font-size:22px;font-weight:800;box-shadow:0 8px 20px rgba(110,70,200,.2);position:relative;text-align:center;max-width:320px}
+.bubble:after{content:'';position:absolute;bottom:-14px;left:50%;margin-left:-14px;border:14px solid transparent;border-top-color:#fff;border-bottom:0}
+.bubble .ko{display:block;font-size:18px;color:var(--ink2);font-weight:400}
+.numiWrap{position:relative;animation:numiBob 2.6s ease-in-out infinite}
+@keyframes numiBob{50%{transform:translateY(-12px)}}
+body.calm .numiWrap{animation:none}
+.numiWrap .acc{position:absolute;left:50%;transform:translateX(-50%);pointer-events:none}
+.platform{width:200px;height:40px;border-radius:50%;background:radial-gradient(closest-side,rgba(140,100,255,.35),transparent);margin-top:-14px}
+
+/* ---------- modal ---------- */
+#modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(60,30,120,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#modal.show{display:flex}
+.mbox{background:linear-gradient(180deg,#fff,#f6f0ff);border-radius:40px;border:5px solid #fff;padding:26px 34px;min-width:min(560px,92vw);max-width:94vw;max-height:92vh;overflow:auto;text-align:center;box-shadow:0 30px 80px rgba(70,30,150,.4);animation:scrIn .45s cubic-bezier(.2,1.4,.4,1)}
+.mbox h3{margin:0 0 8px;font-size:40px;font-weight:800;color:var(--pink)}
+.stars3{font-size:70px;letter-spacing:8px}
+.stars3 i{font-style:normal;display:inline-block;animation:numPop .6s cubic-bezier(.2,1.8,.4,1) both}
+.stars3 i.off{filter:grayscale(1) opacity(.3)}
+.set{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 6px;border-bottom:2px dashed #e5dcff;font-size:24px;font-weight:800}
+.sw{width:86px;height:46px;border-radius:30px;background:#ddd;position:relative;transition:.2s}
+.sw:after{content:'';position:absolute;top:5px;left:5px;width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.2s}
+.sw.on{background:linear-gradient(90deg,var(--mint),var(--sky))}.sw.on:after{left:45px}
+input[type=range]{width:240px;accent-color:#a079ff;height:30px}
+select{font-family:inherit;font-size:18px;padding:8px;border-radius:14px;border:2px solid #d8cbff;max-width:300px}
+
+/* ---------- particles ---------- */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
+.pt{position:absolute;left:0;top:0;font-size:28px;will-change:transform}
+.dot{position:absolute;width:12px;height:12px;border-radius:3px}
+.toast{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:90;font-size:44px;font-weight:800;color:#fff;padding:10px 34px;border-radius:999px;
+  background:linear-gradient(90deg,#ff7ac0,#a98bff);box-shadow:0 10px 30px rgba(120,60,220,.4);animation:toast 1.4s forwards;pointer-events:none;white-space:nowrap}
+.toast.bad{background:linear-gradient(90deg,#ffa8bf,#ffc59b)}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,20px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1.08)}25%{transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-20px)}}
+
+/* ---------- LISTENING ---------- */
+.th-listen #bg,.bg-listen{background:radial-gradient(800px 500px at 80% 10%,#6d4bd8 0%,transparent 60%),radial-gradient(700px 600px at 0% 100%,#d9479a 0%,transparent 60%),linear-gradient(180deg,#24135e,#3d1f86 60%,#5a2a9a)!important}
+.dark{color:#fff}
+.dark .mhead h2{background:linear-gradient(90deg,#ffd6f0,#d6c8ff,#b5e6ff);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 12px rgba(255,180,255,.6))}
+.dark .inst .ko{color:#e3d9ff}
+.panel .inst .ko,.desk .inst .ko,.glass .inst .ko,.lcard .ko{color:var(--ink2)!important}
+.desk{color:var(--ink)}
+.mhead h2 .e{color:#000;-webkit-text-fill-color:#000;filter:none}
+.planet{position:absolute;border-radius:50%;pointer-events:none}
+.lcard{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:14px;border-radius:40px;
+  background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(240,232,255,.9));border:5px solid #fff;color:var(--ink);box-shadow:0 0 0 8px rgba(255,255,255,.12),0 30px 70px rgba(0,0,0,.35);min-height:0;position:relative;overflow:hidden}
+.lcard.flip{animation:flipIn .5s cubic-bezier(.2,1.2,.4,1)}
+@keyframes flipIn{0%{transform:perspective(900px) rotateY(80deg);opacity:0}100%{transform:none;opacity:1}}
+.pv{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.pvb{border-radius:22px;padding:8px 18px;text-align:center;color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.15);animation:numPop .5s cubic-bezier(.2,1.6,.4,1) both;cursor:pointer}
+.pvb b{display:block;font-size:34px;line-height:1.1}
+.pvb small{display:block;font-size:20px;font-weight:800;text-transform:uppercase;opacity:.95}
+.c-th{background:linear-gradient(160deg,#ff9bd2,#ff5fae)}.c-h{background:linear-gradient(160deg,#c3aeff,#8c6bff)}.c-r{background:linear-gradient(160deg,#9be0ff,#29a8f0)}
+.pvb{transition:transform .2s,box-shadow .2s}
+.pvb.hl{transform:scale(1.12) translateY(-4px);box-shadow:0 0 0 5px #fff,0 0 34px #ffe680}
+.op{font-size:40px;font-weight:800;color:#b49ae8;animation:numPop .5s both}
+.deckbar{display:flex;flex-direction:column;gap:10px;width:190px;flex:0 0 auto}
+.deck{border-radius:22px;padding:10px;font-size:20px;font-weight:800;background:rgba(255,255,255,.12);color:#fff;border:3px solid rgba(255,255,255,.35);text-align:left;line-height:1.1}
+.deck small{display:block;font-size:15px;opacity:.85;font-family:'Jua';font-weight:400}
+.deck.on{background:linear-gradient(160deg,#ffe98a,#ffbf1f);color:#5a3d00;border-color:#fff;box-shadow:0 0 24px rgba(255,220,100,.6)}
+.navb{position:absolute;top:50%;transform:translateY(-50%);z-index:3}
+
+/* ---------- LAB ---------- */
+.bg-lab{background:linear-gradient(rgba(255,255,255,.35) 2px,transparent 2px) 0 0/40px 40px,linear-gradient(90deg,rgba(255,255,255,.35) 2px,transparent 2px) 0 0/40px 40px,linear-gradient(160deg,#c8fff0,#b5e6ff 60%,#d6c8ff)!important}
+.blk{position:relative;border-radius:22px;padding:12px 22px;font-size:34px;font-weight:800;color:#fff;touch-action:none;cursor:grab;
+  box-shadow:0 8px 0 rgba(0,0,0,.18),inset 0 4px 0 rgba(255,255,255,.45),0 14px 24px rgba(60,40,140,.2);text-shadow:0 2px 0 rgba(0,0,0,.15);min-width:120px;text-align:center;z-index:2}
+.blk.dragging{z-index:60;transform:scale(1.1);cursor:grabbing;box-shadow:0 20px 40px rgba(60,40,140,.35)}
+.machine{border-radius:40px;border:5px dashed #a98bff;background:rgba(255,255,255,.55);min-height:150px;min-width:420px;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;position:relative}
+.machine.hot{background:rgba(255,248,200,.8);border-color:#ffbf1f}
+.pvcols{display:flex;gap:14px;justify-content:center;align-items:flex-end}
+.pvc{width:130px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pvc .stack{height:min(19vh,170px);width:110px;border-radius:20px;background:rgba(255,255,255,.55);border:3px solid #fff;display:flex;flex-direction:column-reverse;align-items:center;gap:3px;padding:6px;overflow:hidden}
+.pvc .stack i{display:block;width:90px;height:min(1.5vh,14px);flex:0 0 auto;border-radius:6px;animation:numPop .3s both}
+.pvc .lb{font-size:18px;font-weight:800;background:#fff;border-radius:12px;padding:2px 10px}
+.pvc .dg{font-size:36px;font-weight:800;line-height:1}
+.popb{width:170px;height:120px;border-radius:30px;font-size:36px;font-weight:800;color:#fff;box-shadow:0 8px 0 rgba(0,0,0,.18),inset 0 4px 0 rgba(255,255,255,.5)}
+.popb.gone{animation:popGone .35s forwards}
+@keyframes popGone{60%{transform:scale(1.3);opacity:.7}100%{transform:scale(0);opacity:0}}
+
+/* ---------- SPELLING ---------- */
+.bg-spell{background:repeating-linear-gradient(180deg,transparent 0 46px,rgba(169,139,255,.18) 46px 48px),linear-gradient(160deg,#fff4fb,#efe8ff 60%,#e4f6ff)!important}
+.lvls{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;flex:1;align-items:stretch}
+.lvl{border-radius:34px;padding:14px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 10px 0 rgba(0,0,0,.15),0 18px 30px rgba(90,50,180,.2);border:4px solid #fff}
+.lvl b{font-size:30px}.lvl .em{font-size:60px}.lvl span{font-family:'Jua';font-size:19px;text-align:center}
+.typed{min-height:86px;font-size:44px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:8px 22px;border-radius:24px;background:#fff;border:4px solid #d6c8ff;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;width:100%;max-width:1000px}
+.typed .cur{display:inline-block;width:4px;height:46px;background:var(--pink);margin-left:3px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.typed .L{display:inline-block;animation:letterShine .5s both}
+@keyframes letterShine{0%{transform:scale(.3) translateY(10px);color:#ffd84d}60%{transform:scale(1.4);color:#ff5fae;text-shadow:0 0 18px #ffe680}100%{transform:none}}
+.kb{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}
+.kr{display:flex;gap:7px;justify-content:center}
+.key{width:min(7.6vw,78px);height:min(9vh,68px);border-radius:16px;font-size:30px;font-weight:800;background:linear-gradient(180deg,#fff,#efe9ff);box-shadow:0 5px 0 #c9b9f5;text-transform:uppercase}
+.key:active{transform:translateY(4px);box-shadow:0 1px 0 #c9b9f5;background:#fff59a}
+.key.wide{width:min(22vw,230px)}.key.mid{width:min(12vw,120px);font-size:24px}
+.key.ok{background:linear-gradient(180deg,#8ff5d2,#33d6a3);color:#fff;box-shadow:0 5px 0 #1ea57c}
+.key.del{background:linear-gradient(180deg,#ffd0e4,#ff9bc9);box-shadow:0 5px 0 #e0709f}
+.slots{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;min-height:84px}
+.slot{min-width:150px;height:76px;border-radius:20px;border:4px dashed #b9a4ff;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;text-transform:uppercase;padding:0 14px}
+.slot.fill{border-style:solid;border-color:#33d6a3;background:#e6fff6;animation:boing .4s}
+.diff .wok{color:#16b07a}.diff .wno{color:#ff4d7d;text-decoration:underline wavy}
+
+/* ---------- SUPERMARKET ---------- */
+.bg-market{background:linear-gradient(45deg,rgba(255,255,255,.5) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.5) 75%) 0 0/60px 60px,linear-gradient(45deg,rgba(255,255,255,.5) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.5) 75%) 30px 30px/60px 60px,linear-gradient(180deg,#fff7c2,#c8fff0)!important}
+.awning{height:30px;margin:0 18px;border-radius:0 0 20px 20px;background:repeating-linear-gradient(90deg,#ff7ac0 0 50px,#fff 50px 100px);box-shadow:0 6px 0 rgba(0,0,0,.08)}
+.mk{display:flex;gap:16px;flex:1;min-height:0}
+.shelf{flex:1.35;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:14px 10px;padding:16px;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.4));border:4px solid #fff;position:relative;min-height:0}
+.shelf:before,.shelf:after{content:'';position:absolute;left:10px;right:10px;height:12px;border-radius:8px;background:linear-gradient(180deg,#e9b98a,#c98b5a);box-shadow:0 4px 0 #a46a3c}
+.shelf:before{top:50%}.shelf:after{bottom:6px}
+.prod{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:24px;background:transparent;position:relative;z-index:1;min-height:0;padding:4px;touch-action:none}
+.prod .pe{font-size:min(8vh,60px);filter:drop-shadow(0 8px 5px rgba(0,0,0,.2));transition:transform .2s}
+.prod:active .pe{transform:scale(1.2) rotate(-6deg)}
+.prod .tag{font-size:20px}
+.prod.glow .pe{animation:glowP 1s ease-in-out infinite}
+@keyframes glowP{50%{transform:scale(1.18);filter:drop-shadow(0 0 16px #ffe680) drop-shadow(0 8px 5px rgba(0,0,0,.2))}}
+.prod.ok{background:rgba(143,240,203,.6)}
+.prod.sel{background:rgba(255,232,120,.6);outline:4px dashed #ffbf1f}
+.side{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:30px;min-height:0;overflow:auto}
+.cust{font-size:80px;line-height:1;animation:numiBob 2s ease-in-out infinite}
+.cartlist{flex:1;overflow:auto;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;font-size:40px;min-height:60px}
+.total{font-size:40px;font-weight:800}
+.dial{display:flex;flex-direction:column;align-items:center;gap:4px}
+.dial .dg{font-size:48px;font-weight:800;width:70px;text-align:center;background:#fff;border-radius:16px;border:3px solid #d6c8ff}
+
+/* ---------- TOY SHOP ---------- */
+.bg-toy{background:radial-gradient(600px 300px at 50% 0%,rgba(255,180,230,.6),transparent),linear-gradient(180deg,#5b2c8e,#9b4fb8 50%,#f39ac9)!important}
+.lights{position:absolute;top:0;left:0;right:0;height:30px;display:flex;justify-content:space-around;pointer-events:none}
+.lights i{width:16px;height:22px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;margin-top:8px;animation:bulb 1.6s ease-in-out infinite;box-shadow:0 0 16px currentColor}
+@keyframes bulb{50%{opacity:.35}}
+.toyshelf{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px;border-radius:30px;background:rgba(255,255,255,.18);border:3px solid rgba(255,255,255,.5)}
+.toy{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;border-radius:22px;transition:.2s}
+.toy .pe{font-size:min(8vh,58px)}
+.toy.ask{background:rgba(255,240,140,.5);box-shadow:0 0 0 4px #ffe680,0 0 30px #ffe680;animation:glowP 1.2s ease-in-out infinite}
+.counter{flex:1;display:flex;gap:18px;align-items:flex-end;min-height:0;position:relative}
+.custArea{width:260px;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+.custArea .cust{font-size:110px}
+.walkin{animation:walkin .8s cubic-bezier(.2,1.2,.4,1)}
+@keyframes walkin{from{transform:translateX(300px);opacity:0}to{transform:none;opacity:1}}
+.walkout{animation:walkout .7s forwards}
+@keyframes walkout{to{transform:translateX(-300px);opacity:0}}
+.desk{flex:1;align-self:stretch;border-radius:30px 30px 0 0;background:linear-gradient(180deg,#ffd6ec,#ffb3dc);border:4px solid #fff;padding:16px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* ---------- ARCADE ---------- */
+.bg-arcade{background:radial-gradient(500px 300px at 20% 20%,rgba(255,90,200,.45),transparent),radial-gradient(500px 300px at 80% 70%,rgba(60,200,255,.45),transparent),linear-gradient(160deg,#1b1546,#2b1c6e)!important}
+.agrid{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:14px;flex:1;min-height:0}
+.ag{border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;position:relative;
+  background:linear-gradient(160deg,var(--t1),var(--t2));border:3px solid rgba(255,255,255,.7);box-shadow:0 0 18px var(--t1),0 7px 0 rgba(0,0,0,.3);min-height:0;padding:4px}
+.ag .em{font-size:min(6.5vh,48px)}
+.ag b{font-size:min(2.6vh,19px);text-align:center;line-height:1}
+.ag .st{position:absolute;top:4px;right:8px;font-size:16px}
+.ag .num{position:absolute;top:6px;left:10px;font-size:14px;opacity:.85}
+.gamearea{flex:1;position:relative;border-radius:30px;overflow:hidden;min-height:0;display:flex;flex-direction:column}
+.gamearea.panel{background:rgba(255,255,255,.92);border:4px solid #fff;color:var(--ink);padding:14px}
+.dots{display:flex;gap:6px}
+.dots i{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.35);border:2px solid #fff}
+.dots i.on{background:var(--yel);box-shadow:0 0 10px var(--yel)}
+.fall{position:absolute;top:-120px;font-size:34px;font-weight:800;padding:12px 18px;border-radius:24px;background:linear-gradient(180deg,#fff,#ffe9f6);color:var(--ink);box-shadow:0 6px 0 #e7a7cf,0 0 20px rgba(255,255,255,.6);animation:fall linear infinite}
+@keyframes fall{from{transform:translateY(0)}to{transform:translateY(calc(100vh))}}
+.bub{position:absolute;bottom:-160px;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:800;color:var(--ink);
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(190,230,255,.55) 40%,rgba(255,160,230,.35) 70%,rgba(255,255,255,.7));border:3px solid rgba(255,255,255,.9);box-shadow:inset -8px -10px 20px rgba(160,120,255,.3);animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) translateX(0)}25%{transform:translateY(-30vh) translateX(20px)}50%{transform:translateY(-60vh) translateX(-15px)}75%{transform:translateY(-90vh) translateX(15px)}100%{transform:translateY(-120vh) translateX(0)}}
+.chest{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:70px;transition:.3s}
+.chest .tag{font-size:24px}
+.chest.open{transform:scale(1.15)}
+.track{position:relative;height:120px;border-radius:30px;background:repeating-linear-gradient(90deg,#4b4b6b 0 60px,#5a5a7e 60px 120px);border:4px solid #fff;overflow:hidden}
+.track:after{content:'';position:absolute;left:0;right:0;top:50%;border-top:6px dashed #fff8;}
+.car{position:absolute;left:10px;top:18px;font-size:76px;transition:left .8s cubic-bezier(.3,1.4,.5,1);transform:scaleX(-1);z-index:2}
+.flag{position:absolute;right:14px;top:20px;font-size:70px}
+.wheel{width:min(52vh,420px);height:min(52vh,420px);position:relative}
+.wheel svg{width:100%;height:100%;transition:transform 3.2s cubic-bezier(.15,.9,.2,1)}
+.wheel .pin{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:48px;z-index:2;filter:drop-shadow(0 4px 2px rgba(0,0,0,.3))}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;flex:1}
+.mc{perspective:800px;min-height:0}
+.mc .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.mc.f .in{transform:rotateY(180deg)}
+.mc .fa,.mc .ba{position:absolute;inset:0;border-radius:22px;display:grid;place-items:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:4px solid #fff;font-weight:800;padding:6px;text-align:center}
+.mc .fa{background:linear-gradient(160deg,#ff9bd2,#a98bff);font-size:50px;color:#fff}
+.mc .ba{background:#fff;transform:rotateY(180deg);font-size:28px;color:var(--ink);text-transform:uppercase;line-height:1.1}
+.mc .ba.wd{font-size:19px}
+.mc.m .ba{background:linear-gradient(180deg,#d4ffef,#8ff0cb)}
+.monster{font-size:min(28vh,220px);line-height:1;transition:.3s;filter:drop-shadow(0 0 30px rgba(255,80,200,.6))}
+.monster.hit{animation:hit .5s}
+@keyframes hit{20%{transform:translateX(-20px) rotate(-10deg) scale(.9);filter:brightness(2)}50%{transform:translateX(16px) rotate(8deg)}}
+.monster.laugh{animation:laugh .6s}
+@keyframes laugh{25%{transform:rotate(-8deg) scale(1.08)}75%{transform:rotate(8deg) scale(1.08)}}
+.hp{display:flex;gap:6px;font-size:34px}
+.basket{font-size:110px;border-radius:30px;padding:6px 24px;background:rgba(255,255,255,.6);border:4px dashed #ffbf1f}
+.basket.hot{background:#fff6c4;transform:scale(1.08)}
+.conv{height:120px;border-radius:24px;background:repeating-linear-gradient(90deg,#9aa0c8 0 30px,#b4b9dd 30px 60px);border:4px solid #fff;display:flex;align-items:flex-end;gap:4px;padding:8px;flex-wrap:wrap;overflow:hidden;align-content:flex-end}
+.cube{border-radius:6px;animation:drop .4s cubic-bezier(.3,1.6,.5,1) both;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+@keyframes drop{from{transform:translateY(-140px)}to{transform:none}}
+
+/* ---------- MISSION / COLLECTION ---------- */
+.bg-mission{background:radial-gradient(400px 120px at 20% 20%,#fff 0,transparent 70%),radial-gradient(500px 140px at 80% 35%,#fff 0,transparent 70%),linear-gradient(180deg,#9ad8ff,#d9ecff 60%,#fff3c9)!important}
+.bg-coll{background:radial-gradient(600px 400px at 50% 50%,#fff0fa,transparent),linear-gradient(160deg,#ffd6ef,#e8dcff 60%,#ffeec2)!important}
+.mis{display:flex;align-items:center;gap:14px;padding:10px 16px;border-radius:24px;background:rgba(255,255,255,.8);border:3px solid #fff;box-shadow:0 5px 0 rgba(120,150,220,.3)}
+.mis .em{font-size:44px}.mis .tx{flex:1;font-size:22px;font-weight:800}.mis .tx small{display:block;font-family:'Jua';font-weight:400;color:var(--ink2);font-size:17px}
+.mis .bar{height:14px;border-radius:9px;background:#e8e0ff;overflow:hidden;margin-top:4px}.mis .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--sky))}
+.stk{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+.sk{aspect-ratio:1;border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:50px;background:#fff;border:4px solid #fff;box-shadow:0 6px 0 #e3d4ff}
+.sk small{font-size:13px;font-weight:800;text-align:center;line-height:1}
+.sk.lock{filter:grayscale(1);opacity:.35}
+.mic{width:130px;height:130px;border-radius:50%;font-size:60px;background:radial-gradient(circle at 35% 30%,#ffb3dc,#ff5fae);color:#fff;box-shadow:0 10px 0 #c93c86,0 0 0 0 rgba(255,95,174,.6)}
+.mic.on{animation:micPulse 1.1s infinite}
+@keyframes micPulse{0%{box-shadow:0 10px 0 #c93c86,0 0 0 0 rgba(255,95,174,.6)}100%{box-shadow:0 10px 0 #c93c86,0 0 0 40px rgba(255,95,174,0)}}
+.hint{font-family:'Jua';font-size:19px;color:var(--ink2)}
+@media (orientation:portrait){
+  .map{grid-template-columns:1fr 1fr;grid-template-rows:auto auto repeat(4,1fr)}
+  .mapNumi{grid-column:1/-1;grid-row:2}
+  .lvls{grid-template-columns:repeat(3,1fr)}
+  .mk{flex-direction:column}
+  .agrid{grid-template-columns:repeat(3,1fr)}
+  .deckbar{width:140px}
+}
+@media (max-height:640px){ .w{font-size:26px} .ch{font-size:24px;min-height:64px} .btn{min-height:54px;font-size:22px} }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="app">
+  <div id="hud"></div>
+  <div id="stage"></div>
+</div>
+<div id="modal"><div class="mbox" id="mbox"></div></div>
+<div id="fx"></div>
+<script>
+'use strict';
+/* =========================================================
+   SUPER NUMBER WORLD — core engine
+   ========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const fmt = n => n.toLocaleString('en-US');
+
+/* ---------- number → English ---------- */
+const ONES = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+const TENS = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function u100(n) { if (n < 20) return [ONES[n]]; const t = TENS[Math.floor(n / 10)], o = n % 10; return [o ? t + '-' + ONES[o] : t]; }
+function u1000(n) { const w = []; const h = Math.floor(n / 100), r = n % 100; if (h) w.push(ONES[h], 'hundred'); if (r) w.push(...u100(r)); return w; }
+function words(n) { if (n === 0) return ['zero']; const th = Math.floor(n / 1000), r = n % 1000, w = []; if (th) w.push(...u1000(th), 'thousand'); if (r) w.push(...u1000(r)); return w; }
+const W = n => words(n).join(' ');
+const WU = n => W(n).toUpperCase();
+function chunks(n) {
+  const out = [], th = Math.floor(n / 1000), h = Math.floor((n % 1000) / 100), r = n % 100;
+  if (th) out.push({ val: th * 1000, w: [...u1000(th), 'thousand'], cls: 'c-th' });
+  if (h) out.push({ val: h * 100, w: [ONES[h], 'hundred'], cls: 'c-h' });
+  if (r) out.push({ val: r, w: u100(r), cls: 'c-r' });
+  return out;
+}
+/* coloured digits: thousands part pink, hundreds lavender, rest sky */
+function numHTML(n) {
+  const s = fmt(n); let out = '', digitsLeft = String(n).length, i = 0;
+  for (const ch of s) {
+    if (ch === ',') { out += `<span class="d cm" style="animation-delay:${i * 60}ms">,</span>`; i++; continue; }
+    const cls = digitsLeft > 3 ? 'th' : digitsLeft === 3 ? 'h' : 'r';
+    out += `<span class="d ${cls}" style="animation-delay:${i * 60}ms">${ch}</span>`; digitsLeft--; i++;
+  }
+  return out;
+}
+/* flexible spoken / typed English → number */
+const FIX = { for: 'four', fore: 'four', to: 'two', too: 'two', ate: 'eight', won: 'one', tree: 'three', free: 'three', fife: 'five', sex: 'six', tin: 'ten', hundreds: 'hundred', thousands: 'thousand', fourty: 'forty', nighty: 'ninety', eighty: 'eighty', fiveteen: 'fifteen', handred: 'hundred', housand: 'thousand', tousand: 'thousand', sousand: 'thousand' };
+function parseEnglish(t) {
+  if (!t) return null;
+  t = String(t).toLowerCase().replace(/(\d),(\d)/g, '$1$2').replace(/-/g, ' ').replace(/[^a-z0-9 ]/g, ' ');
+  let total = 0, cur = 0, any = false;
+  for (let tk of t.split(/\s+/).filter(Boolean)) {
+    tk = FIX[tk] || tk; let v;
+    if (/^\d+$/.test(tk)) { cur += +tk; any = true; }
+    else if ((v = ONES.indexOf(tk)) >= 0) { cur += v; any = true; }
+    else if ((v = TENS.indexOf(tk)) >= 2) { cur += v * 10; any = true; }
+    else if (tk === 'hundred') { cur = (cur || 1) * 100; any = true; }
+    else if (tk === 'thousand') { total += (cur || 1) * 1000; cur = 0; any = true; }
+  }
+  return any ? total + cur : null;
+}
+const normWords = s => String(s).toLowerCase().replace(/-/g, ' ').replace(/\band\b/g, ' ').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+
+/* ---------- number pools ---------- */
+function randNum(d) {
+  d = d || S.diff; const r = Math.random();
+  if (d === 1) return r < .3 ? rnd(1, 9) * 100 : r < .55 ? rnd(1, 9) * 1000 : rnd(1, 9) * 1000 + rnd(1, 9) * 100;
+  if (d === 2) return r < .12 ? rnd(1, 9) * 100 : r < .3 ? rnd(1, 9) * 1000 : r < .6 ? rnd(1, 9) * 1000 + rnd(1, 9) * 100 : rnd(10, 99) * 1000 + (Math.random() < .5 ? 0 : rnd(1, 9) * 100);
+  return r < .2 ? rnd(1, 9) * 1000 + rnd(1, 9) * 100 : r < .45 ? rnd(10, 99) * 1000 + rnd(0, 9) * 100 : rnd(100, 99999);
+}
+function nums(k, d) { const s = new Set(); while (s.size < k) s.add(randNum(d)); return [...s]; }
+/* tricky look-alike distractors (5,800 → 5,080 / 8,500 / 580 / 58,000 …) */
+function similar(n, k) {
+  const c = new Set(), s = String(n);
+  [n * 10, n / 10, n + 1000, n - 1000, n + 100, n - 100, n * 10 + 0].forEach(x => c.add(x));
+  if (s.length >= 2) { const a = s.split(''); [a[0], a[1]] = [a[1], a[0]]; c.add(+a.join('')); }
+  const th = Math.floor(n / 1000), h = Math.floor(n % 1000 / 100);
+  if (th && h && th < 10) { c.add(th * 1000 + h * 10); c.add(h * 1000 + th * 100); c.add(th * 100 + h * 10); }
+  if (th && !h && th < 10) { c.add(th * 100); c.add(th * 10000); }
+  if (!th && h) { c.add(h * 1000); c.add(h * 10); }
+  let arr = shuffle([...c].filter(x => Number.isInteger(x) && x >= 100 && x <= 99999 && x !== n));
+  while (arr.length < k) { const x = randNum(); if (x !== n && !arr.includes(x)) arr.push(x); }
+  return arr.slice(0, k);
+}
+
+/* ---------- state ---------- */
+const DEF = { stars: 0, coins: 0, seen: {}, sfx: true, voice: true, rate: .9, voiceName: '', calm: false, diff: 1, owned: [], wear: '', stickers: [], creatures: [], mis: { date: '', p: {}, c: {} }, correct: 0, prices: {}, timer: false };
+let S = DEF;
+try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('snw3') || '{}')); } catch (e) { S = Object.assign({}, DEF); }
+function save() { try { localStorage.setItem('snw3', JSON.stringify(S)); } catch (e) { } }
+const level = () => 1 + Math.floor(S.stars / 12);
+const STAGES = [[1, 'Baby NUMI', '아기 누미'], [3, 'Junior NUMI', '꼬마 누미'], [6, 'Star NUMI', '별빛 누미'], [10, 'Super NUMI', '슈퍼 누미']];
+const stage = () => { let s = STAGES[0]; STAGES.forEach(x => { if (level() >= x[0]) s = x; }); return s; };
+
+/* ---------- learning decks ---------- */
+const DECKS = [
+  { id: 'h', name: '100 – 900', ko: '백의 자리', list: Array.from({ length: 9 }, (_, i) => (i + 1) * 100) },
+  { id: 't', name: '1,000 – 9,000', ko: '천의 자리', list: Array.from({ length: 9 }, (_, i) => (i + 1) * 1000) },
+  { id: 'th', name: '1,100 – 9,900', ko: '천 + 백', list: (() => { const a = []; for (let t = 1; t <= 9; t++) for (let h = 1; h <= 9; h++) a.push(t * 1000 + h * 100); return a; })() },
+  { id: 'tt', name: '10,000 – 99,999', ko: '만 단위', list: [10000, 12000, 15000, 20000, 25000, 25800, 30000, 33000, 40500, 48000, 50000, 56700, 60000, 64300, 70000, 72500, 80000, 85000, 90000, 99000, 11111, 23456, 45321, 67890, 99999] }
+];
+const TOTAL_CARDS = DECKS.reduce((a, d) => a + d.list.length, 0);
+const progress = () => Math.min(100, Math.round(Object.keys(S.seen).length / TOTAL_CARDS * 100));
+
+/* ---------- daily missions ---------- */
+const MISSIONS = [
+  { k: 'cards', em: '🎧', n: 10, t: 'Listen to 10 number cards', ko: '숫자 카드 10장 듣기', go: 'listen' },
+  { k: 'lab', em: '🧩', n: 3, t: 'Build 3 numbers in the lab', ko: '연구소에서 숫자 3개 만들기', go: 'lab' },
+  { k: 'spell', em: '✏️', n: 1, t: 'Clear 1 spelling level', ko: '스펠링 레벨 1개 통과', go: 'spell' },
+  { k: 'cart', em: '🛒', n: 1, t: 'Read a cart total', ko: '장바구니 총액 읽기', go: 'market' },
+  { k: 'toy', em: '🧸', n: 3, t: 'Help 3 toy shop customers', ko: '장난감 가게 손님 3명 돕기', go: 'toy' },
+  { k: 'arcade', em: '🎯', n: 3, t: 'Finish 3 arcade games', ko: '미니게임 3개 끝내기', go: 'arcade' },
+  { k: 'speak', em: '🎙️', n: 3, t: 'Say 3 numbers out loud', ko: '숫자 3개 소리 내어 말하기', go: 'listen' }
+];
+function today() { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function misReset() { if (S.mis.date !== today()) S.mis = { date: today(), p: {}, c: {} }; }
+function mission(k, n = 1) {
+  misReset(); const m = MISSIONS.find(x => x.k === k); if (!m) return;
+  const before = S.mis.p[k] || 0; S.mis.p[k] = Math.min(m.n, before + n);
+  if (before < m.n && S.mis.p[k] >= m.n) setTimeout(() => toast('🎯 MISSION CLEAR!'), 900);
+  save();
+}
+
+/* =========================================================
+   SOUND — Web Audio synth effects
+   ========================================================= */
+let AC = null;
+function ac() { try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) { } return AC; }
+function tone(f, d, type = 'sine', vol = .18, when = 0, slide = 0) {
+  const c = ac(); if (!c || !S.sfx) return; const t = c.currentTime + when;
+  const o = c.createOscillator(), g = c.createGain(); o.type = type; o.frequency.setValueAtTime(f, t);
+  if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f + slide), t + d);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .012); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t + d + .05);
+}
+function noise(d, vol = .15, when = 0, hp = 2000) {
+  const c = ac(); if (!c || !S.sfx) return; const t = c.currentTime + when;
+  const b = c.createBuffer(1, c.sampleRate * d, c.sampleRate), ch = b.getChannelData(0);
+  for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * (1 - i / ch.length);
+  const s = c.createBufferSource(); s.buffer = b; const f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp;
+  const g = c.createGain(); g.gain.value = vol; s.connect(f).connect(g).connect(c.destination); s.start(t);
+}
+const SFX = {
+  pop() { tone(520, .09, 'sine', .22, 0, 520); },
+  good() { [784, 988, 1175, 1568].forEach((f, i) => tone(f, .22, 'triangle', .16, i * .07)); tone(2093, .4, 'sine', .07, .3); },
+  bad() { tone(330, .16, 'sine', .16, 0, -120); tone(262, .2, 'sine', .12, .1, -60); },
+  coin() { tone(988, .08, 'square', .07); tone(1319, .25, 'square', .07, .08); },
+  level() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, .25, 'triangle', .15, i * .09)); noise(.5, .05, .55, 5000); },
+  sparkle() { for (let i = 0; i < 6; i++) tone(1500 + Math.random() * 1500, .18, 'sine', .06, i * .05); },
+  register() { noise(.08, .2, 0, 3000); tone(1568, .12, 'square', .06, .08); tone(2093, .35, 'triangle', .1, .16); },
+  bounce() { tone(260, .15, 'sine', .22, 0, 420); tone(540, .1, 'sine', .1, .09, 200); },
+  chest() { tone(392, .12, 'triangle', .15); tone(523, .12, 'triangle', .15, .1); [784, 1047, 1319, 1568].forEach((f, i) => tone(f, .3, 'sine', .1, .22 + i * .06)); this.sparkle(); },
+  whoosh() { noise(.3, .08, 0, 800); },
+  boss() { tone(110, .4, 'sawtooth', .08, 0, -40); }
+};
+
+/* =========================================================
+   VOICE — Web Speech API (en-US)
+   ========================================================= */
+let VOICES = [], lastSay = null;
+const PREF = ['Samantha', 'Google US English', 'Microsoft Aria', 'Microsoft Jenny', 'Microsoft Ava', 'Ava', 'Allison', 'Nicky', 'Microsoft Guy', 'Alex', 'Microsoft Zira'];
+function loadVoices() {
+  if (!('speechSynthesis' in window)) return;
+  const all = speechSynthesis.getVoices();
+  VOICES = all.filter(v => /^en[-_]US/i.test(v.lang));
+  if (!VOICES.length) VOICES = all.filter(v => /^en/i.test(v.lang));
+}
+if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function chooseVoice() {
+  if (!VOICES.length) loadVoices();
+  if (S.voiceName) { const v = VOICES.find(v => v.name === S.voiceName); if (v) return v; }
+  const nat = VOICES.find(v => /natural|premium|enhanced/i.test(v.name)); if (nat) return nat;
+  for (const p of PREF) { const v = VOICES.find(v => v.name.includes(p)); if (v) return v; }
+  return VOICES[0] || null;
+}
+/* speak(text, {rate, chips:[elements per word], onend}) — highlights each word chip while speaking */
+let hlTimer = null;
+function speak(text, o = {}) {
+  lastSay = { text, o };
+  if (!S.voice || !('speechSynthesis' in window)) { o.onend && setTimeout(o.onend, 300); return; }
+  speechSynthesis.cancel(); clearInterval(hlTimer);
+  const chips = o.chips || [];
+  chips.forEach(c => c.classList.remove('hl'));
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; const v = chooseVoice(); if (v) u.voice = v;
+  u.rate = (o.rate || 1) * S.rate; u.pitch = 1.05;
+  // word offsets (chips correspond to the LAST n words of text)
+  const toks = [...text.matchAll(/\S+/g)].map(m => m.index);
+  const off = toks.length - chips.length; let gotBoundary = false;
+  const mark = i => { chips.forEach((c, j) => c.classList.toggle('hl', j === i)); };
+  u.onboundary = e => {
+    if (e.name && e.name !== 'word') return; gotBoundary = true;
+    let wi = 0; toks.forEach((p, i) => { if (p <= e.charIndex) wi = i; });
+    if (wi - off >= 0) mark(wi - off);
+  };
+  u.onstart = () => {
+    if (!chips.length) return;
+    setTimeout(() => {
+      if (gotBoundary) return; // fallback timing
+      const ws = text.split(/\s+/); const per = ws.map(w => (w.length + 3) * 62 / u.rate);
+      let i = 0, t0 = Date.now(), acc = 0; const starts = per.map(p => (acc += p) - p);
+      hlTimer = setInterval(() => { const el = Date.now() - t0 + 250; while (i < starts.length - 1 && starts[i + 1] <= el) i++; if (i - off >= 0) mark(i - off); if (el > acc + 400) clearInterval(hlTimer); }, 60);
+    }, 250);
+  };
+  u.onend = () => { clearInterval(hlTimer); setTimeout(() => mark(-1), 250); o.onend && o.onend(); };
+  u.onerror = () => { clearInterval(hlTimer); mark(-1); };
+  setTimeout(() => speechSynthesis.speak(u), 40);
+}
+const sayN = (n, o) => speak(W(n), o);
+function replay() { if (lastSay) speak(lastSay.text, lastSay.o); }
+function speakSeq(list, gap = 450) { // list of [text, opts]
+  let i = 0; const nx = () => { if (i >= list.length) return; const [t, o = {}] = list[i++]; speak(t, Object.assign({}, o, { onend: () => setTimeout(nx, gap) })); }; nx();
+}
+
+/* =========================================================
+   FX — particles, toasts, rewards
+   ========================================================= */
+function center(e) { if (!e) return { x: innerWidth / 2, y: innerHeight / 2 }; const r = e.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+function burst(at, n = 18, set = ['⭐', '✨', '💖', '🪙', '🌟']) {
+  if (S.calm) n = Math.ceil(n / 3);
+  const p = at && at.nodeType ? center(at) : (at || center());
+  const fx = $('#fx'); const cols = ['#ff7ac0', '#a98bff', '#5cc8ff', '#3fe0b0', '#ffd84d'];
+  for (let i = 0; i < n; i++) {
+    const isDot = Math.random() < .45;
+    const d = isDot ? el(`<i class="dot" style="background:${pick(cols)}"></i>`) : el(`<span class="pt">${pick(set)}</span>`);
+    fx.appendChild(d);
+    const a = Math.random() * Math.PI * 2, sp = 120 + Math.random() * 220;
+    const dx = Math.cos(a) * sp, dy = Math.sin(a) * sp - 120;
+    d.animate([{ transform: `translate(${p.x}px,${p.y}px) scale(.3) rotate(0)`, opacity: 1 },
+    { transform: `translate(${p.x + dx}px,${p.y + dy}px) scale(1.2) rotate(${rnd(-200, 200)}deg)`, opacity: 1, offset: .55 },
+    { transform: `translate(${p.x + dx * 1.2}px,${p.y + dy + 260}px) scale(.6) rotate(${rnd(-400, 400)}deg)`, opacity: 0 }],
+      { duration: 1100 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.4,1)' }).onfinish = () => d.remove();
+  }
+}
+function flyTo(fromEl, toSel, emoji, n = 5) {
+  const a = center(fromEl), tgt = $(toSel); if (!tgt) return; const b = center(tgt); const fx = $('#fx');
+  for (let i = 0; i < n; i++) {
+    const d = el(`<span class="pt">${emoji}</span>`); fx.appendChild(d);
+    const mx = (a.x + b.x) / 2 + rnd(-120, 120), my = Math.min(a.y, b.y) - rnd(60, 180);
+    d.animate([{ transform: `translate(${a.x}px,${a.y}px) scale(.5)` }, { transform: `translate(${mx}px,${my}px) scale(1.3)` }, { transform: `translate(${b.x - 14}px,${b.y - 18}px) scale(.7)` }],
+      { duration: 800, delay: i * 90, easing: 'ease-in-out', fill: 'both' }).onfinish = () => { d.remove(); };
+  }
+}
+function toast(t, bad) { const d = el(`<div class="toast ${bad ? 'bad' : ''}">${t}</div>`); document.body.appendChild(d); setTimeout(() => d.remove(), 1500); }
+const PRAISE = ['GREAT!', 'AWESOME!', 'SUPER!', 'PERFECT!', 'YOU GOT IT!', 'AMAZING!', 'WOW!'];
+function addCoins(n, from) { S.coins += n; save(); if (from) flyTo(from, '#pCoin', '🪙', Math.min(6, n)); setTimeout(() => { SFX.coin(); hud(true, 'coin'); }, 700); }
+function addStars(n, from) {
+  const lv = level(); S.stars += n; save(); if (from) flyTo(from, '#pStar', '⭐', Math.min(5, n));
+  setTimeout(() => { hud(true, 'star'); if (level() > lv) levelUp(); }, 750);
+}
+/* correct answer feedback */
+function good(e, coins = 1, quiet) {
+  SFX.good(); burst(e, 16); S.correct++; if (!quiet) toast(pick(PRAISE));
+  if (e) { e.classList.remove('boing'); void e.offsetWidth; e.classList.add('boing'); }
+  addCoins(coins, e); numiMood('yay');
+}
+/* wrong answer feedback — always gentle, then hear the right answer */
+function oops(e, n, line) {
+  SFX.bad(); if (e) { e.classList.remove('shake'); void e.offsetWidth; e.classList.add('shake'); }
+  numiMood('hmm');
+  if (n != null) setTimeout(() => speak(line || W(n)), 350);
+}
+function levelUp() {
+  SFX.level(); burst(null, 40);
+  const st = stage();
+  modal(`<h3>LEVEL UP! 🎉</h3><div class="numiWrap" style="display:inline-block">${numiSVG(180)}</div>
+  <div style="font-size:30px;font-weight:800">LEVEL ${level()} · ${st[1]}</div><div class="ko hint">누미가 자랐어요! (${st[2]})</div>
+  <div class="row" style="margin-top:14px"><button class="btn mint big" data-close>YAY!</button></div>`);
+}
+
+/* =========================================================
+   NUMI — the mascot (SVG)
+   ========================================================= */
+const ACC = [
+  { id: 'bow', e: '🎀', price: 20, name: 'Ribbon' }, { id: 'cap', e: '🧢', price: 30, name: 'Cap' }, { id: 'glasses', e: '🕶️', price: 40, name: 'Sunglasses' },
+  { id: 'flower', e: '🌸', price: 25, name: 'Flower' }, { id: 'tophat', e: '🎩', price: 60, name: 'Magic Hat' }, { id: 'crown', e: '👑', price: 100, name: 'Crown' },
+  { id: 'head', e: '🎧', price: 50, name: 'Headphones' }, { id: 'party', e: '🥳', price: 80, name: 'Party Face' }
+];
+function numiSVG(size = 160, mood = '') {
+  const lv = level(), st = lv >= 10 ? 3 : lv >= 6 ? 2 : lv >= 3 ? 1 : 0;
+  const body = [['#fff0fb', '#d9b8ff', '#9b7bff'], ['#fff6fb', '#ffc0e3', '#ff7ac0'], ['#f2fffb', '#9ef0d6', '#3fc8b0'], ['#fffbe6', '#ffd97a', '#ff9f3d']][st];
+  const id = 'g' + Math.random().toString(36).slice(2, 7);
+  const eyes = mood === 'yay'
+    ? `<path d="M64 112 q11 -14 22 0" stroke="#3a2770" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M114 112 q11 -14 22 0" stroke="#3a2770" stroke-width="6" fill="none" stroke-linecap="round"/>`
+    : `<ellipse cx="75" cy="112" rx="13" ry="16" fill="#3a2770"/><ellipse cx="125" cy="112" rx="13" ry="16" fill="#3a2770"/><circle cx="79" cy="106" r="5" fill="#fff"/><circle cx="129" cy="106" r="5" fill="#fff"/><circle cx="71" cy="118" r="2.5" fill="#fff"/><circle cx="121" cy="118" r="2.5" fill="#fff"/>`;
+  const mouth = mood === 'hmm' ? `<path d="M90 140 q10 -6 20 0" stroke="#3a2770" stroke-width="5" fill="none" stroke-linecap="round"/>`
+    : `<path d="M86 134 q14 16 28 0" stroke="#3a2770" stroke-width="5" fill="#ff8fb8" stroke-linecap="round"/>`;
+  const stars = st >= 2 ? `<text x="30" y="60" font-size="20">✨</text><text x="150" y="70" font-size="18">✨</text>` : '';
+  const cape = st >= 3 ? `<path d="M48 120 Q30 180 70 186 L130 186 Q170 180 152 120 Z" fill="#ff7ac0" opacity=".85"/>` : '';
+  return `<svg viewBox="0 0 200 200" width="${size}" height="${size}" class="numi">
+  <defs><radialGradient id="${id}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${body[0]}"/><stop offset=".5" stop-color="${body[1]}"/><stop offset="1" stop-color="${body[2]}"/></radialGradient>
+  <radialGradient id="${id}s" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fffbe0"/><stop offset="1" stop-color="#ffc21f"/></radialGradient></defs>
+  ${cape}
+  <line x1="100" y1="62" x2="100" y2="30" stroke="${body[2]}" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="100,8 106,22 121,23 109,32 113,47 100,39 87,47 91,32 79,23 94,22" fill="url(#${id}s)" stroke="#f0a800" stroke-width="2" stroke-linejoin="round"/>
+  <ellipse cx="62" cy="180" rx="20" ry="11" fill="${body[2]}"/><ellipse cx="138" cy="180" rx="20" ry="11" fill="${body[2]}"/>
+  <ellipse cx="34" cy="128" rx="14" ry="20" fill="${body[1]}" transform="rotate(-25 34 128)"/><ellipse cx="166" cy="128" rx="14" ry="20" fill="${body[1]}" transform="rotate(25 166 128)"/>
+  <ellipse cx="100" cy="120" rx="70" ry="64" fill="url(#${id})"/>
+  <ellipse cx="78" cy="78" rx="22" ry="11" fill="#fff" opacity=".55" transform="rotate(-20 78 78)"/>
+  ${eyes}
+  <ellipse cx="56" cy="134" rx="11" ry="7" fill="#ff8fc8" opacity=".6"/><ellipse cx="144" cy="134" rx="11" ry="7" fill="#ff8fc8" opacity=".6"/>
+  ${mouth}
+  <text x="100" y="172" text-anchor="middle" font-size="18" font-weight="800" fill="#fff" font-family="Baloo 2,sans-serif" opacity=".9">123</text>
+  ${stars}</svg>`;
+}
+function numiFull(size = 200, mood = '') {
+  const a = ACC.find(x => x.id === S.wear);
+  const accHTML = a ? `<span class="acc" style="top:${a.id === 'glasses' || a.id === 'party' ? size * .43 : size * -.02}px;font-size:${size * .3}px">${a.e}</span>` : '';
+  return `<div class="numiWrap" style="width:${size}px">${numiSVG(size, mood)}${accHTML}</div>`;
+}
+function numiMood(m) { $$('.numiHost').forEach(h => { h.innerHTML = numiFull(+h.dataset.size || 120, m); clearTimeout(h._t); h._t = setTimeout(() => h.innerHTML = numiFull(+h.dataset.size || 120), 1300); }); }
+
+/* =========================================================
+   HUD + modal + settings
+   ========================================================= */
+function hud(bump, which) {
+  const st = stage();
+  $('#hud').innerHTML = `
+  <div class="pill" id="pStar"><span class="ic">⭐</span><span>${S.stars}</span></div>
+  <div class="pill" id="pCoin"><span class="ic">🪙</span><span>${S.coins}</span></div>
+  <div class="pill"><span class="ic">📈</span><div class="prog"><i style="width:${progress()}%"></i></div><span style="font-size:18px">${progress()}%</span></div>
+  <div class="pill"><span class="ic" style="background:linear-gradient(145deg,#fff,#d6c8ff)">🏅</span><span>LV ${level()}</span></div>
+  <div class="sp"></div>
+  <div class="pill" id="hudNumi">${numiSVG(44)}<span style="font-size:18px">${st[1]}</span></div>
+  <button class="hudbtn" data-act="sound" title="sound">${S.sfx ? '🔔' : '🔕'}</button>
+  <button class="hudbtn" data-act="settings" title="settings">⚙️</button>`;
+  if (bump) { const p = which === 'coin' ? $('#pCoin') : $('#pStar'); p && p.classList.add('bump'); }
+}
+function modal(html, onClose) {
+  const m = $('#modal'), b = $('#mbox'); b.innerHTML = html; m.classList.add('show'); m._onClose = onClose;
+  return b;
+}
+function closeModal() { const m = $('#modal'); m.classList.remove('show'); $('#mbox').innerHTML = ''; const f = m._onClose; m._onClose = null; f && f(); }
+function settings() {
+  const opts = VOICES.map(v => `<option ${v.name === (chooseVoice() || {}).name ? 'selected' : ''}>${v.name}</option>`).join('');
+  const b = modal(`<h3>⚙️ SETTINGS</h3>
+   <div class="set"><span>🔔 효과음 Sound FX</span><button class="sw ${S.sfx ? 'on' : ''}" data-k="sfx"></button></div>
+   <div class="set"><span>🗣️ 영어 음성 Voice</span><button class="sw ${S.voice ? 'on' : ''}" data-k="voice"></button></div>
+   <div class="set"><span>🐢 말하기 속도 Speed</span><span class="row"><input type="range" min=".5" max="1.2" step=".05" value="${S.rate}" id="rate"><b id="rv">${S.rate.toFixed(2)}x</b></span></div>
+   <div class="set"><span>🎤 목소리 고르기</span><select id="vsel">${opts || '<option>기본 음성</option>'}</select></div>
+   <div class="set"><span>🌙 차분 모드 (움직임 줄이기)</span><button class="sw ${S.calm ? 'on' : ''}" data-k="calm"></button></div>
+   <div class="row" style="margin-top:16px"><button class="btn sky sm" id="vtest">🔊 TEST</button><button class="btn white sm" id="reset">↺ 처음부터</button><button class="btn mint" data-close>OK</button></div>`);
+  b.querySelectorAll('.sw').forEach(s => s.onclick = () => { S[s.dataset.k] = !S[s.dataset.k]; s.classList.toggle('on'); save(); document.body.classList.toggle('calm', S.calm); if (!S.voice) speechSynthesis && speechSynthesis.cancel(); hud(); });
+  $('#rate', b).oninput = e => { S.rate = +e.target.value; $('#rv', b).textContent = S.rate.toFixed(2) + 'x'; save(); };
+  $('#vsel', b).onchange = e => { S.voiceName = e.target.value; save(); speak('Hello! I am Numi. Five thousand eight hundred!'); };
+  $('#vtest', b).onclick = () => speak('Hello! I am Numi. Five thousand eight hundred!');
+  $('#reset', b).onclick = () => { if (confirm('모든 기록을 지우고 처음부터 시작할까요?')) { S = Object.assign({}, DEF, { seen: {}, owned: [], stickers: [], creatures: [], mis: { date: '', p: {}, c: {} }, prices: {} }); save(); closeModal(); hud(); go('map'); } };
+}
+
+/* =========================================================
+   drag helper (pointer events — touch + mouse)
+   ========================================================= */
+function draggable(node, { onDrop, onStart, targets }) {
+  node.style.touchAction = 'none';
+  node.addEventListener('pointerdown', e => {
+    if (node.dataset.lock) return; e.preventDefault(); ac();
+    const sx = e.clientX, sy = e.clientY; let moved = false; node.setPointerCapture(e.pointerId);
+    node.classList.add('dragging'); onStart && onStart(node); SFX.pop();
+    const mv = ev => {
+      const dx = ev.clientX - sx, dy = ev.clientY - sy; if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+      node.style.transform = `translate(${dx}px,${dy}px) scale(1.1)`;
+      (targets ? targets() : []).forEach(t => { const r = t.getBoundingClientRect(); t.classList.toggle('hot', ev.clientX > r.left && ev.clientX < r.right && ev.clientY > r.top && ev.clientY < r.bottom); });
+    };
+    const up = ev => {
+      node.removeEventListener('pointermove', mv); node.removeEventListener('pointerup', up); node.removeEventListener('pointercancel', up);
+      node.classList.remove('dragging');
+      let hit = null; (targets ? targets() : []).forEach(t => { const r = t.getBoundingClientRect(); if (ev.clientX > r.left && ev.clientX < r.right && ev.clientY > r.top && ev.clientY < r.bottom) hit = t; t.classList.remove('hot'); });
+      const back = () => { node.animate([{ transform: node.style.transform }, { transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.2,1.5,.4,1)' }); node.style.transform = ''; };
+      if (onDrop(node, hit, moved) === false) back(); else node.style.transform = '';
+    };
+    node.addEventListener('pointermove', mv); node.addEventListener('pointerup', up); node.addEventListener('pointercancel', up);
+  });
+}
+
+/* =========================================================
+   SPEAKING — speech recognition + voice recording
+   ========================================================= */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recUrl = null;
+function listenFor(target, cb) {
+  const rec = new SR(); rec.lang = 'en-US'; rec.maxAlternatives = 5; rec.interimResults = false; rec.continuous = false;
+  let done = false;
+  rec.onresult = e => {
+    done = true; const alts = []; for (const r of e.results) for (const a of r) alts.push(a.transcript);
+    const ok = alts.some(a => parseEnglish(a) === target || normWords(a).includes(normWords(W(target))));
+    cb(ok, alts[0] || '');
+  };
+  rec.onerror = e => { if (!done) { done = true; cb(null, e.error); } };
+  rec.onend = () => { if (!done) { done = true; cb(null, 'no-speech'); } };
+  try { rec.start(); } catch (e) { cb(null, 'error'); }
+  return rec;
+}
+async function recordVoice(btn, playBtn) {
+  if (!navigator.mediaDevices || !window.MediaRecorder) { toast('녹음을 지원하지 않아요', true); return; }
+  try {
+    const st = await navigator.mediaDevices.getUserMedia({ audio: true }); const mr = new MediaRecorder(st); const parts = [];
+    mr.ondataavailable = e => parts.push(e.data);
+    mr.onstop = () => { st.getTracks().forEach(t => t.stop()); recUrl && URL.revokeObjectURL(recUrl); recUrl = URL.createObjectURL(new Blob(parts, { type: mr.mimeType })); btn.innerHTML = '⏺ 녹음'; playBtn.disabled = false; SFX.sparkle(); };
+    mr.start(); btn.innerHTML = '⏹ 멈추기'; btn.onclick = () => mr.state === 'recording' && mr.stop();
+    setTimeout(() => mr.state === 'recording' && mr.stop(), 5000);
+  } catch (e) { toast('마이크를 쓸 수 없어요', true); }
+}
+/* the "SAY IT" panel used everywhere. opts.sentence → full sentence model (e.g. "It's ...") */
+function sayIt(n, onDone, opts = {}) {
+  const model = opts.sentence || W(n);
+  const b = modal(`<h3>🎙️ SAY IT!</h3>
+   <div class="bignum">${numHTML(n)}</div>
+   <div class="inst">${opts.hideWords ? '' : model.toUpperCase()}<span class="ko">${SR ? '마이크를 누르고 영어로 말해 보세요' : '듣고 따라 말해 보세요 (따라 읽기 모드)'}</span></div>
+   <div class="row" style="margin:10px 0">
+     <button class="btn sky" id="sHear">🔊 듣기</button>
+     ${SR ? '<button class="mic" id="sMic">🎤</button>' : '<button class="btn mint big" id="sDid">👍 I said it!</button>'}
+     <button class="btn lav" id="sRec">⏺ 녹음</button><button class="btn yel" id="sPlay" ${recUrl ? '' : 'disabled'}>▶ 내 목소리</button>
+   </div>
+   <div id="sRes" class="inst" style="min-height:44px"></div>
+   <button class="btn white sm" data-close>닫기</button>`, () => { onDone && onDone(false); });
+  $('#sHear', b).onclick = () => speak(model);
+  $('#sRec', b).onclick = () => recordVoice($('#sRec', b), $('#sPlay', b));
+  $('#sPlay', b).onclick = () => { if (recUrl) new Audio(recUrl).play(); };
+  const finishOk = () => { mission('speak'); const f = onDone; onDone = null; setTimeout(() => { $('#modal')._onClose = null; closeModal(); f && f(true); }, 1300); };
+  if (SR) {
+    $('#sMic', b).onclick = () => {
+      speechSynthesis && speechSynthesis.cancel(); const m = $('#sMic', b); m.classList.add('on'); $('#sRes', b).innerHTML = '듣고 있어요… 👂';
+      listenFor(n, (ok, heard) => {
+        m.classList.remove('on');
+        if (ok) { $('#sRes', b).innerHTML = `✅ "${heard}" <span class="ko">완벽해요!</span>`; good($('#sRes', b), 2); finishOk(); }
+        else if (ok === false) { $('#sRes', b).innerHTML = `🤔 "${heard}" <span class="ko">다시 들어 보고 말해 볼까요?</span>`; oops($('#sRes', b), n, model); }
+        else { $('#sRes', b).innerHTML = `<span class="ko">잘 안 들렸어요. 다시 눌러 주세요 🎤</span>`; }
+      });
+    };
+  } else {
+    $('#sDid', b).onclick = () => { good($('#sDid', b), 1); finishOk(); };
+  }
+  setTimeout(() => speak(model), 300);
+}
+
+/* =========================================================
+   round-end card
+   ========================================================= */
+function finish({ miss = 0, title = 'GREAT JOB!', again, back, coins = 3, sticker }) {
+  const st = miss <= 1 ? 3 : miss <= 3 ? 2 : 1;
+  SFX.level(); burst(null, 40, ['⭐', '🪙', '🎉', '✨', '💖']);
+  let stHTML = '';
+  if (sticker && !S.stickers.includes(sticker)) { S.stickers.push(sticker); save(); stHTML = `<div class="hint" style="font-size:22px">🎁 새 스티커를 얻었어요! → MY COLLECTION</div>`; }
+  const b = modal(`<h3>${title}</h3>
+   <div class="stars3">${[0, 1, 2].map(i => `<i class="${i < st ? '' : 'off'}" style="animation-delay:${i * .2}s">⭐</i>`).join('')}</div>
+   <div class="numiHost" data-size="130" style="display:inline-block">${numiFull(130, 'yay')}</div>
+   <div style="font-size:26px;font-weight:800">+${st} ⭐ &nbsp; +${coins} 🪙</div>${stHTML}
+   <div class="row" style="margin-top:14px">${again ? '<button class="btn mint big" id="fAgain">🔁 AGAIN</button>' : ''}<button class="btn lav big" id="fBack">✔ OK</button></div>`);
+  addStars(st, $('.stars3', b)); addCoins(coins, $('.stars3', b));
+  speak(pick(['Great job!', 'Awesome work!', 'You did it!', 'Super!']));
+  if (again) $('#fAgain', b).onclick = () => { closeModal(); again(); };
+  $('#fBack', b).onclick = () => { closeModal(); back && back(); };
+}
+
+/* =========================================================
+   router
+   ========================================================= */
+const SCREENS = {};
+let cur = 'map', cleanup = [];
+function go(name, arg) {
+  cleanup.forEach(f => { try { f(); } catch (e) { } }); cleanup = [];
+  speechSynthesis && speechSynthesis.cancel && speechSynthesis.cancel();
+  cur = name; const stage = $('#stage'); stage.innerHTML = '';
+  $('#bg').className = ''; document.body.className = S.calm ? 'calm' : '';
+  const scr = el(`<div class="screen"></div>`); stage.appendChild(scr);
+  SCREENS[name](scr, arg); hud();
+}
+function setBg(cls) { $('#bg').className = cls; }
+function header(scr, title, opts = {}) {
+  const h = el(`<div class="mhead">
+   <button class="btn white round" data-home title="home">🏠</button>
+   ${opts.back ? '<button class="btn white round" data-back title="back">⬅️</button>' : ''}
+   <h2>${title.replace(/^(\S+)\s/, '<span class="e">$1</span> ')}</h2>
+   ${opts.extra || ''}
+   <button class="btn yel sm" data-replay>🔊 다시 듣기</button></div>`);
+  scr.appendChild(h);
+  $('[data-home]', h).onclick = () => go('map');
+  if (opts.back) $('[data-back]', h).onclick = opts.back;
+  $('[data-replay]', h).onclick = () => replay();
+  return h;
+}
+
+/* global taps: bouncy buttons + pop sound + modal close */
+document.addEventListener('pointerdown', e => { ac(); const b = e.target.closest('.btn,.tab,.ch,.tile,.ag,.key,.deck,.hudbtn,.lvl'); if (b) { SFX.pop(); b.classList.remove('boing'); void b.offsetWidth; b.classList.add('boing'); } }, true);
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) closeModal();
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  if (a.dataset.act === 'settings') settings();
+  if (a.dataset.act === 'sound') { S.sfx = !S.sfx; save(); hud(); toast(S.sfx ? '🔔 SOUND ON' : '🔕 SOUND OFF'); }
+});
+/* =========================================================
+   MAIN WORLD MAP
+   ========================================================= */
+const TILES = [
+  { id: 'listen', em: '🪐', t: 'LISTENING PLANET', ko: '먼저 듣고 배우기', c: ['#ff9bd2', '#a98bff', '#8159e0'], pos: [1, 2] },
+  { id: 'lab', em: '🧪', t: 'NUMBER LAB', ko: '숫자 조립 연구소', c: ['#7cf0c8', '#4ebcff', '#2a93c9'], pos: [2, 2] },
+  { id: 'spell', em: '✏️', t: 'SPELLING STUDIO', ko: '직접 쓰고 배우기', c: ['#c3aeff', '#ff7ac0', '#c94a8e'], pos: [1, 3] },
+  { id: 'market', em: '🛒', t: 'SUPERMARKET', ko: '가격 읽기 게임', c: ['#ffe27a', '#3fe0b0', '#1fa77d'], pos: [2, 3] },
+  { id: 'toy', em: '🧸', t: 'TOY SHOP', ko: '장난감 가게 주인', c: ['#ffb3dc', '#ff9f5a', '#d86b2e'], pos: [4, 2] },
+  { id: 'arcade', em: '🕹️', t: 'NUMBER ARCADE', ko: '미니게임 15개', c: ['#7fd3ff', '#8c6bff', '#5a3fc0'], pos: [5, 2] },
+  { id: 'mission', em: '🚀', t: 'MISSION WORLD', ko: '오늘의 미션', c: ['#9be0ff', '#3fe0b0', '#22a487'], pos: [4, 3] },
+  { id: 'coll', em: '🎁', t: 'MY COLLECTION', ko: '스티커 & 누미 꾸미기', c: ['#ffe27a', '#ff7ac0', '#d0468c'], pos: [5, 3] }
+];
+const NUMI_TALK = [['Hi! I\'m NUMI!', '안녕! 나는 누미야. 같이 숫자 여행 가자!'], ['Tap me!', '나를 눌러 봐! 숫자를 말해 줄게'], ['Start with LISTENING!', '처음엔 리스닝 행성부터 가 볼까?'], ['Let\'s go shopping!', '슈퍼마켓에서 가격을 읽어 보자!']];
+SCREENS.map = scr => {
+  const map = el(`<div class="map"><h1 class="title">SUPER NUMBER WORLD!<small>THE PRICE ADVENTURE</small></h1></div>`);
+  TILES.forEach((t, i) => {
+    const d = el(`<button class="tile" style="--t1:${t.c[0]};--t2:${t.c[1]};--t3:${t.c[2]};grid-column:${t.pos[0]};grid-row:${t.pos[1]}"><span class="no">${i + 1}</span><span class="em">${t.em}</span><b>${t.t}</b><span>${t.ko}</span></button>`);
+    d.onclick = () => { SFX.whoosh(); go(t.id); };
+    map.appendChild(d);
+  });
+  misReset();
+  const done = MISSIONS.filter(m => (S.mis.p[m.k] || 0) >= m.n).length;
+  const talk = pick(NUMI_TALK);
+  const nm = el(`<div class="mapNumi">
+     <div class="bubble" id="nb">${talk[0]}<span class="ko">${talk[1]}</span></div>
+     <div class="numiHost" data-size="${Math.min(230, innerHeight * .3)}" style="margin-top:18px;cursor:pointer">${numiFull(Math.min(230, innerHeight * .3))}</div>
+     <div class="platform"></div>
+     <div class="pill" style="font-size:18px">🎯 오늘의 미션 ${done}/${MISSIONS.length}</div></div>`);
+  map.appendChild(nm);
+  $('.numiHost', nm).onclick = () => { const n = randNum(1); $('#nb').innerHTML = `${fmt(n)}!<span class="ko">${WU(n)}</span>`; numiMood('yay'); SFX.sparkle(); speak(`${W(n)}!`); };
+  scr.appendChild(map);
+  setTimeout(() => speak('Welcome to Super Number World!'), 400);
+};
+
+/* =========================================================
+   LISTENING PLANET
+   ========================================================= */
+const L = { deck: 0, i: 0 };
+SCREENS.listen = scr => {
+  setBg('bg-listen'); scr.classList.add('dark');
+  scr.appendChild(el(`<div class="planet" style="width:140px;height:140px;right:-50px;bottom:-40px;background:radial-gradient(circle at 30% 30%,#ffd6f0,#ff7ac0 60%,#a0307a);box-shadow:0 0 60px rgba(255,120,200,.6)"></div>`));
+  scr.appendChild(el(`<div class="planet" style="width:90px;height:90px;left:30px;bottom:30px;background:radial-gradient(circle at 30% 30%,#d8fff2,#3fe0b0 60%,#178a6a);box-shadow:0 0 40px rgba(60,230,180,.5)"></div>`));
+  header(scr, '🪐 LISTENING PLANET');
+  const body = el(`<div class="mbody" style="flex-direction:row;gap:16px"></div>`); scr.appendChild(body);
+  const bar = el(`<div class="deckbar"></div>`); body.appendChild(bar);
+  DECKS.forEach((d, i) => {
+    const seen = d.list.filter(n => S.seen[n]).length;
+    const b = el(`<button class="deck ${i === L.deck ? 'on' : ''}">${d.name}<small>${d.ko} · ${seen}/${d.list.length}</small></button>`);
+    b.onclick = () => { L.deck = i; L.i = 0; go('listen'); }; bar.appendChild(b);
+  });
+  bar.appendChild(el(`<div class="hint" style="color:#e3d9ff;margin-top:6px">👉 카드를 옆으로 밀거나<br>◀ ▶ 를 눌러 넘겨요</div>`));
+  const main = el(`<div class="col grow" style="gap:12px;position:relative"></div>`); body.appendChild(main);
+  const cardWrap = el(`<div style="flex:1;width:100%;display:flex;position:relative;min-height:0"></div>`); main.appendChild(cardWrap);
+  const ctr = el(`<div class="row">
+    <button class="btn" id="lSpeak">🔊 SPEAK</button>
+    <button class="btn sky" id="lSlow">🐢 SLOW</button>
+    <button class="btn lav" id="lRep">🔁 ×3</button>
+    <button class="btn yel" id="lBuild">🧱 STEP</button>
+    <button class="btn mint" id="lSay">🎙️ SAY IT</button></div>`);
+  main.appendChild(ctr);
+  let chips = [], blocks = [], n;
+  const show = (dir = 0) => {
+    const deck = DECKS[L.deck]; L.i = (L.i + deck.list.length) % deck.list.length; n = deck.list[L.i];
+    if (!S.seen[n]) { S.seen[n] = 1; mission('cards'); const c = Object.keys(S.seen).length; if (c % 5 === 0) addStars(1, cardWrap); save(); hud(); }
+    const ch = chunks(n);
+    let pv = '';
+    if (ch.length > 1) pv = ch.map((c, i) => `${i ? '<span class="op">+</span>' : ''}<div class="pvb ${c.cls}" data-i="${i}" style="animation-delay:${.4 + i * .25}s"><b>${fmt(c.val)}</b><small>${c.w.join(' ')}</small></div>`).join('') + `<span class="op" style="animation-delay:${.4 + ch.length * .25}s">=</span>`;
+    cardWrap.innerHTML = '';
+    const card = el(`<div class="lcard ${dir ? 'flip' : ''}">
+      <div class="hint">CARD ${L.i + 1} / ${deck.list.length} ${S.seen[n] ? '✅' : ''}</div>
+      <div class="bignum">${numHTML(n)}</div>
+      <div class="pv">${pv}</div>
+      <div class="words">${words(n).map(w => `<button class="w">${w}</button>`).join('')}</div>
+      <div class="hint">단어를 누르면 그 단어만 들을 수 있어요 👆</div></div>`);
+    cardWrap.appendChild(card);
+    const prev = el(`<button class="btn white round navb" style="left:-8px">◀</button>`), next = el(`<button class="btn white round navb" style="right:-8px">▶</button>`);
+    prev.onclick = () => { L.i--; show(-1); }; next.onclick = () => { L.i++; show(1); };
+    cardWrap.append(prev, next);
+    chips = $$('.w', card); blocks = $$('.pvb', card);
+    chips.forEach(c => c.onclick = () => { speak(c.textContent); c.classList.add('hl'); setTimeout(() => c.classList.remove('hl'), 700); });
+    blocks.forEach(b => b.onclick = () => { const c = ch[+b.dataset.i]; speak(c.w.join(' ')); b.classList.add('hl'); setTimeout(() => b.classList.remove('hl'), 900); });
+    // swipe
+    let sx = null; card.addEventListener('pointerdown', e => sx = e.clientX);
+    card.addEventListener('pointerup', e => { if (sx == null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 70) { L.i += dx < 0 ? 1 : -1; show(dx < 0 ? 1 : -1); } });
+    SFX.sparkle();
+    setTimeout(() => cur === 'listen' && build(), 700);
+  };
+  const whole = (rate) => speak(W(n), { chips, rate });
+  const build = () => {
+    const ch = chunks(n);
+    if (ch.length < 2) return whole();
+    const seq = ch.map((c, i) => [c.w.join(' '), { onstart: 0, _b: i }]);
+    let i = 0;
+    const step = () => {
+      if (i < ch.length) { const b = blocks[i]; blocks.forEach(x => x.classList.remove('hl')); b && b.classList.add('hl'); SFX.bounce(); speak(ch[i].w.join(' '), { onend: () => { i++; setTimeout(step, 350); } }); }
+      else { blocks.forEach(x => x.classList.remove('hl')); speak(W(n), { chips }); }
+    };
+    step();
+  };
+  $('#lSpeak', ctr).onclick = () => whole();
+  $('#lSlow', ctr).onclick = () => whole(.6);
+  $('#lRep', ctr).onclick = () => { let k = 0; const once = () => { if (k++ < 3) speak(W(n), { chips, onend: () => setTimeout(once, 600) }); }; once(); };
+  $('#lBuild', ctr).onclick = build;
+  $('#lSay', ctr).onclick = () => sayIt(n, ok => ok && addStars(1));
+  show(1);
+};
+
+/* =========================================================
+   NUMBER LAB
+   ========================================================= */
+const LAB_TABS = [['build', '🧱 BUILD'], ['blocks', '📦 PLACE VALUE'], ['pop', '💥 POP!'], ['compare', '⚖️ COMPARE'], ['missing', '❓ MISSING'], ['zoom', '🔍 ×10 ZOOM']];
+let labTab = 'build';
+const blkColor = v => v >= 10000 ? 'linear-gradient(160deg,#ffd07a,#ff9f3d)' : v >= 1000 ? 'linear-gradient(160deg,#ff9bd2,#ff5fae)' : v >= 100 ? 'linear-gradient(160deg,#c3aeff,#8c6bff)' : v >= 10 ? 'linear-gradient(160deg,#9be0ff,#29a8f0)' : 'linear-gradient(160deg,#8ff5d2,#22c493)';
+SCREENS.lab = scr => {
+  setBg('bg-lab'); header(scr, '🧪 NUMBER LAB');
+  const body = el(`<div class="mbody"></div>`); scr.appendChild(body);
+  const tabs = el(`<div class="tabs">${LAB_TABS.map(t => `<button class="tab ${t[0] === labTab ? 'on' : ''}" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>`);
+  body.appendChild(tabs);
+  const area = el(`<div class="col grow safe" style="gap:10px;justify-content:flex-start;overflow:auto"></div>`); body.appendChild(area);
+  tabs.onclick = e => { const t = e.target.closest('.tab'); if (!t) return; labTab = t.dataset.t; $$('.tab', tabs).forEach(x => x.classList.toggle('on', x === t)); area.innerHTML = ''; LAB[labTab](area); };
+  LAB[labTab](area);
+};
+const LAB = {
+  build(area, st = { r: 0, miss: 0 }) {
+    area.innerHTML = '';
+    const th = S.diff >= 2 && Math.random() < .5 ? rnd(10, 99) : rnd(1, 9), h = rnd(1, 9), n = th * 1000 + h * 100;
+    const parts = [th * 1000, h * 100];
+    const dec = new Set([h * 1000, th * 100, (th % 9 + 1) * 1000, ((h + 3) % 9 + 1) * 100].filter(x => !parts.includes(x) && x <= 99999));
+    const blocksV = shuffle([...parts, ...[...dec].slice(0, 2)]);
+    area.appendChild(el(`<div class="inst">Make <b style="color:#ff5fae;font-size:44px">${fmt(n)}</b>!<span class="ko">맞는 블록 2개를 끌어서 기계에 넣어요 (눌러도 돼요)</span></div>`));
+    const mach = el(`<div class="machine"><span class="hint" style="font-size:28px">⚙️ ? + ? ⚙️</span></div>`); area.appendChild(mach);
+    const tray = el(`<div class="row" style="gap:20px;margin-top:10px"></div>`); area.appendChild(tray);
+    area.appendChild(el(`<div class="hint">ROUND ${st.r + 1} / 5</div>`));
+    const placed = [];
+    speak(`Make ${W(n)}!`);
+    blocksV.forEach(v => {
+      const b = el(`<div class="blk" style="background:${blkColor(v)}">${fmt(v)}</div>`); b.val = v; tray.appendChild(b);
+      draggable(b, {
+        targets: () => [mach],
+        onDrop: (node, hit, moved) => {
+          if (!hit && moved) return false;
+          if (parts.includes(v) && !placed.includes(v)) {
+            placed.push(v); node.dataset.lock = 1; SFX.bounce();
+            if (placed.length === 1) mach.innerHTML = ''; else mach.appendChild(el(`<span class="op">+</span>`));
+            node.style.transform = ''; mach.appendChild(node); speak(W(v));
+            if (placed.length === 2) setTimeout(() => {
+              mach.innerHTML = `<div class="col"><div class="bignum" style="font-size:90px">${numHTML(n)}</div><div class="words">${words(n).map(w => `<span class="w">${w}</span>`).join('')}</div></div>`;
+              tray.remove(); good(mach, 2); mission('lab'); speak(W(n), { chips: $$('.w', mach) });
+              setTimeout(() => { if (st.r + 1 >= 5) finish({ miss: st.miss, again: () => LAB.build(area), title: 'LAB MASTER!' }); else LAB.build(area, { r: st.r + 1, miss: st.miss }); }, 3200);
+            }, 700);
+            return true;
+          }
+          st.miss++; oops(node, v, `That's ${W(v)}. Try another block!`); return false;
+        }
+      });
+    });
+  },
+  blocks(area, st = { r: 0, miss: 0 }) {
+    area.innerHTML = '';
+    const places = S.diff >= 3 ? [10000, 1000, 100, 10, 1] : S.diff === 2 ? [10000, 1000, 100] : [1000, 100];
+    let n; do { n = randNum(); } while (n >= places[0] * 10 || (S.diff < 3 && n % 100));
+    const cnt = {}; places.forEach(p => cnt[p] = 0);
+    area.appendChild(el(`<div class="inst" style="font-size:34px;text-transform:uppercase">🎯 ${W(n)}<span class="ko">영어를 읽고 자릿값 블록으로 숫자를 만들어요 · ROUND ${st.r + 1}/5</span></div>`));
+    const cols = el(`<div class="pvcols"></div>`); area.appendChild(cols);
+    const live = el(`<div class="col"><div class="bignum" style="font-size:60px">0</div><div class="hint" id="lw"></div></div>`); area.appendChild(live);
+    const val = () => places.reduce((a, p) => a + p * cnt[p], 0);
+    const lbl = { 10000: '10,000', 1000: '1,000', 100: '100', 10: '10', 1: '1' };
+    const upd = () => {
+      cols.innerHTML = '';
+      places.forEach(p => {
+        const c = el(`<div class="pvc"><span class="lb">${lbl[p]} × ${cnt[p]}</span><button class="btn mint sm round">＋</button><div class="stack">${'<i></i>'.repeat(cnt[p])}</div><button class="btn white sm round">－</button></div>`);
+        $$('.stack i', c).forEach(i => i.style.background = blkColor(p));
+        const [plus, minus] = $$('button', c);
+        plus.onclick = () => { if (cnt[p] < 9) { cnt[p]++; SFX.bounce(); upd(); } };
+        minus.onclick = () => { if (cnt[p] > 0) { cnt[p]--; upd(); } };
+        cols.appendChild(c);
+      });
+      const v = val(); $('.bignum', live).innerHTML = numHTML(v); $('#lw', live).textContent = v ? WU(v) : '';
+    };
+    upd();
+    const row = el(`<div class="row"><button class="btn sky" id="h">🔊 듣기</button><button class="btn mint big" id="ck">✔ CHECK</button></div>`); area.appendChild(row);
+    $('#h', row).onclick = () => speak(W(n));
+    $('#ck', row).onclick = () => {
+      if (val() === n) { good(live, 2); mission('lab'); speak(W(n)); setTimeout(() => { if (st.r + 1 >= 5) finish({ miss: st.miss, again: () => LAB.blocks(area) }); else LAB.blocks(area, { r: st.r + 1, miss: st.miss }); }, 2000); }
+      else { st.miss++; oops(live, n, `You made ${W(val() || 0)}. We need ${W(n)}.`); }
+    };
+    speak(W(n));
+  },
+  pop(area) {
+    area.innerHTML = '';
+    area.appendChild(el(`<div class="inst">POP the blocks! 💥<span class="ko">블록을 터뜨리면 영어 표현이 나와요</span></div>`));
+    const show = el(`<div class="col" style="min-height:150px;justify-content:center"></div>`); area.appendChild(show);
+    const grid = el(`<div class="row" style="gap:18px;max-width:900px"></div>`); area.appendChild(grid);
+    const list = nums(6); let left = 6;
+    list.forEach((v, i) => {
+      const b = el(`<button class="popb" style="background:${blkColor(v)};animation:floaty 3s ${i * .3}s ease-in-out infinite">${fmt(v)}</button>`);
+      b.onclick = () => {
+        if (b.classList.contains('gone')) return; b.classList.add('gone'); SFX.bounce(); burst(b, 14, ['✨', '💥', '⭐']);
+        show.innerHTML = `<div class="bignum" style="font-size:80px">${numHTML(v)}</div><div class="words">${words(v).map(w => `<span class="w">${w}</span>`).join('')}</div>`;
+        speak(W(v), { chips: $$('.w', show) });
+        if (--left === 0) setTimeout(() => { addCoins(2, show); area.appendChild(el(`<div class="row"></div>`)).appendChild(Object.assign(el(`<button class="btn yel big">🎲 NEW BLOCKS</button>`), { onclick: () => LAB.pop(area) })); }, 900);
+      };
+      grid.appendChild(b);
+    });
+  },
+  compare(area, st = { r: 0, miss: 0 }) {
+    area.innerHTML = '';
+    const fixed = [[5080, 5800], [700, 7000], [8500, 5800], [1200, 12000], [3030, 3300], [900, 9000], [6600, 6060], [2500, 5200]];
+    let pair = st.r < 3 ? pick(fixed) : (() => { const a = randNum(); return [a, similar(a, 1)[0]]; })();
+    pair = shuffle(pair);
+    const type = pick(['listen', 'listen', 'big', 'small']);
+    const target = type === 'listen' ? pick(pair) : type === 'big' ? Math.max(...pair) : Math.min(...pair);
+    const q = type === 'listen' ? ['🎧 Which one is it?', '잘 듣고 맞는 숫자를 눌러요'] : type === 'big' ? ['Which is BIGGER? 🐘', '더 큰 숫자를 눌러요'] : ['Which is SMALLER? 🐭', '더 작은 숫자를 눌러요'];
+    area.appendChild(el(`<div class="inst" style="font-size:36px">${q[0]}<span class="ko">${q[1]} · ROUND ${st.r + 1}/5</span></div>`));
+    const row = el(`<div class="row" style="gap:40px"></div>`); area.appendChild(row);
+    pair.forEach(v => {
+      const c = el(`<button class="ch" style="min-width:300px;min-height:200px;font-size:72px">${fmt(v)}<div class="hint" style="font-size:20px;min-height:24px"></div></button>`);
+      c.onclick = () => {
+        if (row.dataset.done) return;
+        $$('.ch', row).forEach((x, i) => $('.hint', x).textContent = WU(pair[i]));
+        if (v === target) {
+          row.dataset.done = 1; c.classList.add('ok'); good(c);
+          speakSeq(type === 'listen' ? [[W(v)]] : [[W(Math.max(...pair))], ['is bigger than'], [W(Math.min(...pair))]], 120);
+          setTimeout(() => { if (st.r + 1 >= 5) finish({ miss: st.miss, again: () => LAB.compare(area) }); else LAB.compare(area, { r: st.r + 1, miss: st.miss }); }, 3600);
+        } else { st.miss++; c.classList.add('no'); oops(c, target); }
+      };
+      row.appendChild(c);
+    });
+    row.appendChild(el(`<span></span>`));
+    if (type === 'listen') speak(W(target)); else speak(type === 'big' ? 'Which is bigger?' : 'Which is smaller?');
+    area.appendChild(Object.assign(el(`<button class="btn sky sm">🔊 다시 듣기</button>`), { onclick: () => replay() }));
+  },
+  missing(area, st = { r: 0, miss: 0 }) {
+    area.innerHTML = '';
+    const step = S.diff >= 2 && Math.random() < .35 ? 10000 : pick([100, 1000, 1000]);
+    const maxStart = step === 100 ? 5 : step === 1000 ? 5 : 5;
+    const start = rnd(1, maxStart) * step + (step === 1000 && Math.random() < .4 ? rnd(1, 9) * 100 : 0);
+    const seq = [0, 1, 2, 3, 4].map(i => start + i * step), gap = rnd(1, 3), ans = seq[gap];
+    area.appendChild(el(`<div class="inst" style="font-size:34px">What number is missing? 🔎<span class="ko">빠진 숫자를 찾아요 · ROUND ${st.r + 1}/5</span></div>`));
+    const row = el(`<div class="row"></div>`); area.appendChild(row);
+    seq.forEach((v, i) => row.appendChild(el(`<div class="ch" style="font-size:44px;min-width:150px;display:grid;place-items:center;${i === gap ? 'background:#fff6c4;border-style:dashed;border-color:#ffbf1f' : ''}">${i === gap ? '❓' : fmt(v)}</div>`)));
+    const ch = el(`<div class="choices" style="max-width:800px"></div>`); area.appendChild(ch);
+    const opts = shuffle([ans, ...similar(ans, 2)]);
+    opts.forEach(v => {
+      const b = el(`<button class="ch" style="font-size:44px">${fmt(v)}</button>`);
+      b.onclick = () => {
+        if (ch.dataset.done) return;
+        if (v === ans) {
+          ch.dataset.done = 1; b.classList.add('ok'); $$('.ch', row)[gap].innerHTML = fmt(ans); good(b); speak(seq.map(W).join(', '));
+          setTimeout(() => { if (st.r + 1 >= 5) finish({ miss: st.miss, again: () => LAB.missing(area) }); else LAB.missing(area, { r: st.r + 1, miss: st.miss }); }, 4200);
+        } else { st.miss++; b.classList.add('no'); oops(b, ans); }
+      };
+      ch.appendChild(b);
+    });
+    speak(seq.map((v, i) => i === gap ? 'hmm?' : W(v)).join(', '));
+  },
+  zoom(area) {
+    area.innerHTML = '';
+    let n = pick([7, 5, 3, 8, 58, 12, 25, 85, 64]), hist = [];
+    while (n < 100) n *= 10;
+    area.appendChild(el(`<div class="inst">×10 ZOOM MACHINE 🔍<span class="ko">10배로 키우고 줄여 보며 hundred ↔ thousand 를 느껴 봐요</span></div>`));
+    const view = el(`<div class="col" style="min-height:220px;justify-content:center"></div>`); area.appendChild(view);
+    const histEl = el(`<div class="row hint" style="font-size:24px"></div>`); area.appendChild(histEl);
+    const ctr = el(`<div class="row"><button class="btn lav big" id="zo">🔎 ÷10 SMALLER</button><button class="btn big" id="zi">🔍 ×10 BIGGER</button><button class="btn yel" id="zn">🎲 NEW</button></div>`); area.appendChild(ctr);
+    const render = (dir) => {
+      view.innerHTML = `<div class="bignum" style="font-size:${dir > 0 ? 130 : 100}px">${numHTML(n)}</div><div class="words">${words(n).map(w => `<span class="w">${w}</span>`).join('')}</div>`;
+      view.animate([{ transform: `scale(${dir > 0 ? .4 : dir < 0 ? 1.8 : 1})`, opacity: .2 }, { transform: 'scale(1)', opacity: 1 }], { duration: 500, easing: 'cubic-bezier(.2,1.4,.4,1)' });
+      hist.push(fmt(n)); if (hist.length > 5) hist.shift(); histEl.textContent = hist.join('  →  ');
+      $('#zi', ctr).disabled = n * 10 > 99999; $('#zo', ctr).disabled = n / 10 < 100 || n % 10 !== 0;
+      speak(W(n), { chips: $$('.w', view) });
+    };
+    $('#zi', ctr).onclick = () => { n *= 10; SFX.whoosh(); render(1); };
+    $('#zo', ctr).onclick = () => { n /= 10; SFX.whoosh(); render(-1); };
+    $('#zn', ctr).onclick = () => LAB.zoom(area);
+    render(0);
+  }
+};
+
+/* =========================================================
+   SPELLING STUDIO
+   ========================================================= */
+const SP_LV = [
+  { em: '🧩', t: 'LEVEL 1', ko: '단어 카드를 순서대로 놓기', c: ['#ff9bd2', '#ff5fae'] },
+  { em: '🕳️', t: 'LEVEL 2', ko: '빈칸에 들어갈 단어 찾기', c: ['#c3aeff', '#8c6bff'] },
+  { em: '⌨️', t: 'LEVEL 3', ko: '숫자 보고 영어로 쓰기', c: ['#9be0ff', '#29a8f0'] },
+  { em: '👂', t: 'LEVEL 4', ko: '듣고 영어로 쓰기', c: ['#8ff5d2', '#22c493'] },
+  { em: '🔢', t: 'LEVEL 5', ko: '영어 보고 숫자 쓰기', c: ['#ffe27a', '#ffad1f'] }
+];
+SCREENS.spell = (scr, lv) => {
+  setBg('bg-spell');
+  if (!lv) {
+    header(scr, '✏️ SPELLING STUDIO');
+    const body = el(`<div class="mbody"><div class="inst">Choose a level!<span class="ko">레벨을 골라요. 1부터 차근차근!</span></div></div>`); scr.appendChild(body);
+    const g = el(`<div class="lvls"></div>`); body.appendChild(g);
+    SP_LV.forEach((l, i) => {
+      const done = S.stickers.includes('sp' + (i + 1));
+      const b = el(`<button class="lvl" style="background:linear-gradient(160deg,${l.c[0]},${l.c[1]})"><span class="em">${l.em}</span><b>${l.t}</b><span>${l.ko}</span><span style="font-size:30px">${done ? '🏅' : ''}</span></button>`);
+      b.onclick = () => go('spell', i + 1); g.appendChild(b);
+    });
+    return;
+  }
+  header(scr, `✏️ SPELLING · LEVEL ${lv}`, { back: () => go('spell') });
+  const body = el(`<div class="mbody col" style="gap:12px;justify-content:center"></div>`); scr.appendChild(body);
+  const st = { r: 0, miss: 0, total: 5 };
+  const qNum = () => lv === 2 ? rnd(1, 9) * 1000 + rnd(1, 9) * 100 : lv <= 4 ? randNum(Math.min(S.diff, 2)) : randNum();
+  const next = () => {
+    if (st.r >= st.total) { mission('spell'); return finish({ miss: st.miss, sticker: 'sp' + lv, again: () => go('spell', lv), back: () => go('spell'), title: `LEVEL ${lv} CLEAR!` }); }
+    body.innerHTML = ''; SP[lv](body, qNum(), st, () => { st.r++; setTimeout(next, 2300); });
+  };
+  next();
+};
+function keyboard(onKey, numeric) {
+  const rows = numeric ? [['1', '2', '3', '4', '5'], ['6', '7', '8', '9', '0'], ['⌫', '💡', '✔']] : [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], ['z', 'x', 'c', 'v', 'b', 'n', 'm', '-'], ['⌫', '💡', 'SPACE', '✔']];
+  const kb = el(`<div class="kb"></div>`);
+  rows.forEach(r => {
+    const row = el(`<div class="kr"></div>`);
+    r.forEach(k => {
+      const cls = k === 'SPACE' ? 'wide' : k === '✔' ? 'mid ok' : k === '⌫' ? 'mid del' : k === '💡' ? 'mid' : '';
+      const b = el(`<button class="key ${cls}">${k === 'SPACE' ? 'space' : k}</button>`); b.onclick = () => onKey(k === 'SPACE' ? ' ' : k); row.appendChild(b);
+    });
+    kb.appendChild(row);
+  });
+  return kb;
+}
+const SP = {
+  1(body, n, st, done) {
+    const ws = words(n); let k = 0;
+    body.appendChild(el(`<div class="inst">Put the words in order!<span class="ko">단어 카드를 순서대로 눌러요 · ${st.r + 1}/${st.total}</span></div>`));
+    body.appendChild(el(`<div class="bignum">${numHTML(n)}</div>`));
+    const slots = el(`<div class="slots">${ws.map(() => '<div class="slot"></div>').join('')}</div>`); body.appendChild(slots);
+    const cards = el(`<div class="row" style="margin-top:10px"></div>`); body.appendChild(cards);
+    shuffle(ws.map((w, i) => ({ w, i }))).forEach(o => {
+      const b = el(`<button class="ch wd" style="min-width:170px">${o.w}</button>`);
+      b.onclick = () => {
+        if (b.disabled) return;
+        if (o.w === ws[k]) { const s = $$('.slot', slots)[k]; s.textContent = o.w; s.classList.add('fill'); b.style.visibility = 'hidden'; b.disabled = true; SFX.bounce(); speak(o.w); k++; if (k === ws.length) { good(slots); setTimeout(() => speak(W(n)), 600); done(); } }
+        else { st.miss++; oops(b, null); speak(`Next word is ${ws[k]}`); }
+      };
+      cards.appendChild(b);
+    });
+    speak(W(n));
+  },
+  2(body, n, st, done) {
+    const ws = words(n), gi = pick([0, 2, 0, 2, 1, 3]), ans = ws[gi];
+    body.appendChild(el(`<div class="inst">Fill in the blank!<span class="ko">빈칸에 알맞은 단어를 골라요 · ${st.r + 1}/${st.total}</span></div>`));
+    body.appendChild(el(`<div class="bignum">${numHTML(n)}</div>`));
+    const ph = el(`<div class="words">${ws.map((w, i) => i === gi ? `<span class="w" style="min-width:150px;background:#fff6c4;border-style:dashed;border-color:#ffbf1f">______</span>` : `<span class="w">${w}</span>`).join('')}</div>`); body.appendChild(ph);
+    const pool = ['hundred', 'thousand'].includes(ans) ? ['hundred', 'thousand', 'million', 'ten'] : shuffle(ONES.slice(1, 10).filter(w => w !== ans)).slice(0, 3).concat(ans);
+    const ch = el(`<div class="choices" style="max-width:900px"></div>`); body.appendChild(ch);
+    shuffle(pool).forEach(w => {
+      const b = el(`<button class="ch wd" style="font-size:30px">${w}</button>`);
+      b.onclick = () => {
+        if (ch.dataset.done) return;
+        if (w === ans) { ch.dataset.done = 1; b.classList.add('ok'); const s = $$('.w', ph)[gi]; s.textContent = w; s.style.background = '#d4ffef'; good(b); speak(W(n), { chips: $$('.w', ph) }); done(); }
+        else { st.miss++; b.classList.add('no'); oops(b, null); speak(`Not ${w}. Listen: ${W(n)}`); }
+      };
+      ch.appendChild(b);
+    });
+  },
+  3(body, n, st, done) { SP.type(body, n, st, done, 'see'); },
+  4(body, n, st, done) { SP.type(body, n, st, done, 'hear'); },
+  5(body, n, st, done) { SP.type(body, n, st, done, 'num'); },
+  type(body, n, st, done, mode) {
+    const target = mode === 'num' ? String(n) : W(n);
+    let typed = '', tries = 0, fin = false;
+    const head = mode === 'see' ? `<div class="bignum" style="font-size:90px">${numHTML(n)}</div>`
+      : mode === 'hear' ? `<button class="btn big sky" id="hear" style="font-size:40px">🔊 LISTEN</button>`
+        : `<div class="words">${words(n).map(w => `<span class="w">${w}</span>`).join('')}</div>`;
+    const ins = mode === 'see' ? ['Write it in English!', '숫자를 영어로 써요'] : mode === 'hear' ? ['Listen and write!', '잘 듣고 영어로 써요'] : ['Write the number!', '영어를 읽고 숫자를 써요'];
+    body.appendChild(el(`<div class="inst" style="margin:0">${ins[0]}<span class="ko">${ins[1]} · ${st.r + 1}/${st.total} · 💡=힌트</span></div>`));
+    body.appendChild(el(`<div class="col" style="gap:8px">${head}</div>`));
+    const box = el(`<div class="typed"></div>`); body.appendChild(box);
+    const fb = el(`<div class="inst diff" style="min-height:40px;margin:0;font-size:26px"></div>`); body.appendChild(fb);
+    const render = () => {
+      const shown = mode === 'num' ? (typed ? fmt(+typed) : '') : typed;
+      box.innerHTML = shown.replace(/ /g, '&nbsp;') + '<span class="cur"></span>';
+    };
+    const check = () => {
+      if (fin) return;
+      const ok = mode === 'num' ? +typed === n : normWords(typed) === normWords(target);
+      if (ok) {
+        fin = true; const shown = mode === 'num' ? fmt(n) : W(n);
+        box.innerHTML = [...shown].map((c, i) => `<span class="L" style="animation-delay:${i * 45}ms">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+        SFX.sparkle(); setTimeout(() => { good(box); speak(W(n)); }, Math.min(1200, shown.length * 45));
+        if (mode === 'hear') fb.innerHTML = `<span style="font-size:50px">${numHTML(n)}</span>`;
+        return done();
+      }
+      tries++; st.miss++;
+      const tw = normWords(typed).split(' '), aw = normWords(target).split(' ');
+      fb.innerHTML = mode === 'num' ? `정답: <b class="wok">${fmt(n)}</b>` : aw.map((w, i) => `<span class="${tw[i] === w ? 'wok' : 'wno'}">${w.toUpperCase()}</span>`).join(' ');
+      oops(box, n);
+      if (tries >= 2) { fin = true; setTimeout(() => { box.innerHTML = mode === 'num' ? fmt(n) : W(n).toUpperCase(); }, 600); return done(); }
+      typed = ''; setTimeout(render, 500);
+      fb.innerHTML += `<span class="ko">초록색은 맞았어요! 다시 써 볼까요?</span>`;
+    };
+    const onKey = k => {
+      if (fin) return;
+      if (k === '⌫') typed = typed.slice(0, -1);
+      else if (k === '✔') return check();
+      else if (k === '💡') { // next correct char
+        const t = mode === 'num' ? target : W(n);
+        let i = 0; while (i < typed.length && typed[i].toLowerCase() === t[i]) i++;
+        typed = t.slice(0, i + 1); SFX.sparkle();
+      }
+      else if (mode === 'num' ? typed.length < 5 : typed.length < 60) typed += k;
+      render();
+    };
+    body.appendChild(keyboard(onKey, mode === 'num'));
+    const phys = e => { if (e.key === 'Backspace') onKey('⌫'); else if (e.key === 'Enter') onKey('✔'); else if (mode === 'num' ? /^[0-9]$/.test(e.key) : /^[a-zA-Z -]$/.test(e.key)) onKey(e.key.toLowerCase()); };
+    document.addEventListener('keydown', phys); cleanup.push(() => document.removeEventListener('keydown', phys));
+    const oldDone = done; done = () => { document.removeEventListener('keydown', phys); oldDone(); };
+    if (mode === 'hear') { $('#hear', body).onclick = () => speak(W(n)); setTimeout(() => speak(W(n)), 400); }
+    if (mode === 'num') speak(W(n), { chips: $$('.w', body) });
+    render();
+  }
+};
+
+/* =========================================================
+   SUPERMARKET
+   ========================================================= */
+const ITEMS = [
+  { id: 'apple', e: '🍎', n: 'apple', p: 700 }, { id: 'milk', e: '🥛', n: 'milk', p: 1000 }, { id: 'juice', e: '🧃', n: 'juice', p: 1500 },
+  { id: 'bread', e: '🍞', n: 'bread', p: 2300 }, { id: 'cake', e: '🍰', n: 'cake', p: 5800 }, { id: 'doll', e: '🧸', n: 'doll', p: 6000 },
+  { id: 'bag', e: '🎒', n: 'bag', p: 8500 }, { id: 'melon', e: '🍉', n: 'watermelon', p: 9900 }, { id: 'car', e: '🚗', n: 'toy car', p: 12000 }, { id: 'shoes', e: '👟', n: 'sneakers', p: 25000 }
+];
+const MK_TABS = [['look', '👀 LOOK & LISTEN'], ['match', '🏷️ MATCH'], ['order', '🙋 ORDER'], ['best', '💎 MOST / LEAST'], ['cart', '🛒 CART'], ['maker', '✏️ PRICE MAKER']];
+const MK = { tab: 'look', tmp: null, cart: [], sel: null };
+const price = it => MK.tmp ? MK.tmp[it.id] : (S.prices[it.id] || it.p);
+SCREENS.market = scr => {
+  setBg('bg-market'); MK.tmp = null;
+  scr.appendChild(el(`<div class="awning"></div>`));
+  header(scr, '🛒 SUPERMARKET');
+  const body = el(`<div class="mbody"></div>`); scr.appendChild(body);
+  const tabs = el(`<div class="tabs">${MK_TABS.map(t => `<button class="tab ${t[0] === MK.tab ? 'on' : ''}" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>`); body.appendChild(tabs);
+  const mk = el(`<div class="mk"><div class="shelf"></div><div class="side glass"></div></div>`); body.appendChild(mk);
+  const shelf = $('.shelf', mk), side = $('.side', mk);
+  const drawShelf = () => {
+    shelf.innerHTML = '';
+    ITEMS.forEach(it => {
+      const d = el(`<button class="prod" data-id="${it.id}"><span class="pe">${it.e}</span><span class="tag">${fmt(price(it))}</span></button>`);
+      d.onclick = () => MK.onTap && MK.onTap(it, d); shelf.appendChild(d);
+    });
+  };
+  MK.drawShelf = drawShelf;
+  const open = t => { MK.tab = t; MK.tmp = null; MK.onTap = null; drawShelf(); side.innerHTML = ''; MKT[t](side, shelf); };
+  tabs.onclick = e => { const t = e.target.closest('.tab'); if (!t) return; $$('.tab', tabs).forEach(x => x.classList.toggle('on', x === t)); open(t.dataset.t); };
+  open(MK.tab);
+};
+const prodEl = (shelf, it) => $(`.prod[data-id="${it.id}"]`, shelf);
+const MKT = {
+  look(side, shelf) {
+    side.innerHTML = `<div class="inst">Tap a product! 👆<span class="ko">상품을 누르면 가격을 영어로 들려줘요</span></div><div class="numiHost col" data-size="160">${numiFull(160)}</div>`;
+    MK.onTap = (it, d) => {
+      $$('.prod', shelf).forEach(x => x.classList.remove('sel')); d.classList.add('sel');
+      const p = price(it); SFX.sparkle();
+      side.innerHTML = `<div class="col" style="gap:8px"><div style="font-size:110px;animation:numPop .5s both">${it.e}</div>
+       <div class="tag" style="font-size:64px;padding:6px 26px;animation:numPop .6s .1s both">${fmt(p)}</div>
+       <div class="words">${words(p).map(w => `<span class="w" style="font-size:28px">${w}</span>`).join('')}</div>
+       <div class="hint">The ${it.n} is ${W(p)}.</div>
+       <div class="row"><button class="btn sky sm" id="a">🔊</button><button class="btn lav sm" id="b">🐢 SLOW</button><button class="btn mint sm" id="c">🎙️ READ IT!</button></div></div>`;
+      const say = r => speak(`The ${it.n} is ${W(p)}.`, { chips: $$('.w', side), rate: r });
+      $('#a', side).onclick = () => say(); $('#b', side).onclick = () => say(.6); $('#c', side).onclick = () => sayIt(p, ok => ok && addStars(1), { sentence: `It's ${W(p)}.` });
+      say();
+    };
+  },
+  quiz(side, shelf, kind) {
+    const st = { r: 0, miss: 0 };
+    const round = () => {
+      if (st.r >= 5) return finish({ miss: st.miss, again: () => MKT.quiz(side, shelf, kind), back: () => { MK.tmp = null; MK.drawShelf(); MKT[kind === 'best' ? 'best' : kind](side, shelf); }, title: 'SHOPPING STAR!' });
+      if (kind === 'best') { const ps = new Set(); while (ps.size < ITEMS.length) ps.add(randNum()); const arr = [...ps]; MK.tmp = {}; ITEMS.forEach((it, i) => MK.tmp[it.id] = arr[i]); MK.drawShelf(); SFX.whoosh(); }
+      $$('.prod', shelf).forEach(x => x.classList.remove('ok', 'sel'));
+      let it, ask;
+      if (kind === 'best') { const most = Math.random() < .5; const sorted = [...ITEMS].sort((a, b) => price(a) - price(b)); it = most ? sorted[sorted.length - 1] : sorted[0]; ask = most ? 'Which is the most expensive?' : 'Which is the cheapest?'; side.innerHTML = `<div class="inst" style="font-size:34px">${most ? '💎 MOST EXPENSIVE' : '🪶 CHEAPEST'}<span class="ko">${most ? '가장 비싼' : '가장 저렴한'} 상품을 찾아요! (가격이 바뀌었어요) · ${st.r + 1}/5</span></div>`; }
+      else { it = pick(ITEMS); }
+      const p = price(it);
+      if (kind === 'match') { ask = W(p); side.innerHTML = `<div class="inst">Find this price! 🏷️<span class="ko">영어 가격표에 맞는 상품을 눌러요 · ${st.r + 1}/5</span></div><div class="tag" style="font-size:34px;padding:16px 22px;text-transform:uppercase;line-height:1.2;align-self:center;text-align:center">${WU(p)}</div>`; }
+      if (kind === 'order') {
+        const who = pick(['🐰', '🐻', '🐼', '🦊', '🐱', '🐨', '🐯']);
+        ask = `Hello! I want something for ${W(p)}, please!`;
+        side.innerHTML = `<div class="inst">Customer order! 🙋<span class="ko">손님이 원하는 가격의 상품을 찾아요 · ${st.r + 1}/5</span></div><div class="col"><div class="cust">${who}</div><div class="bubble" id="ob" style="margin-top:10px">🔊 ...</div></div><button class="btn white sm" id="show">👀 글자 보기</button>`;
+        $('#show', side).onclick = () => $('#ob', side).innerHTML = `I want something for<br><b style="text-transform:uppercase">${W(p)}</b>, please!`;
+      }
+      side.appendChild(Object.assign(el(`<button class="btn sky">🔊 다시 듣기</button>`), { onclick: () => speak(ask) }));
+      speak(ask);
+      let lock = false;
+      MK.onTap = (t, d) => {
+        if (lock) return;
+        if (t === it || price(t) === p && kind !== 'best') {
+          lock = true; d.classList.add('ok'); good(d);
+          speak(kind === 'best' ? `The ${t.n}! It's ${W(p)}.` : kind === 'order' ? `Here you are! The ${t.n} is ${W(p)}.` : `Yes! The ${t.n} is ${W(p)}.`);
+          st.r++; setTimeout(round, 3000);
+        } else { st.miss++; oops(d, null); speak(`That's ${W(price(t))}. ${kind === 'best' ? 'Try again!' : 'We need ' + W(p) + '.'}`); }
+      };
+    };
+    round();
+  },
+  match(side, shelf) { MKT.quiz(side, shelf, 'match'); },
+  order(side, shelf) { MKT.quiz(side, shelf, 'order'); },
+  best(side, shelf) { MKT.quiz(side, shelf, 'best'); },
+  cart(side, shelf) {
+    const total = () => MK.cart.reduce((a, it) => a + price(it), 0);
+    const draw = () => {
+      const t = total();
+      side.innerHTML = `<div class="inst" style="margin:0">My Cart 🛒<span class="ko">상품을 눌러 장바구니에 담아요 (최대 99,999)</span></div>
+       <div class="cartlist">${MK.cart.map(it => `<span title="${fmt(price(it))}">${it.e}</span>`).join('') || '<span class="hint">비어 있어요</span>'}</div>
+       <div class="total">TOTAL: <span style="color:#ff5fae">${numHTML(t)}</span></div>
+       <div class="hint" style="text-transform:uppercase;min-height:22px">${t ? WU(t) : ''}</div>
+       <div class="row"><button class="btn sky sm" id="rd">🔊 READ TOTAL</button><button class="btn yel sm" id="qz">❓ HOW MUCH?</button><button class="btn mint sm" id="pay">💳 PAY</button><button class="btn white sm" id="em">🗑</button></div>`;
+      $('#rd', side).onclick = () => { if (!t) return; speak(`The total is ${W(t)}.`); mission('cart'); };
+      $('#em', side).onclick = () => { MK.cart = []; draw(); };
+      $('#pay', side).onclick = () => { if (!t) return; SFX.register(); burst($('.total', side), 20, ['🪙', '💵', '✨']); speak(`That's ${W(t)}. Thank you!`); addCoins(2, $('.total', side)); mission('cart'); MK.cart = []; setTimeout(draw, 1800); };
+      $('#qz', side).onclick = () => {
+        if (!t) return toast('먼저 상품을 담아요!', true);
+        const ch = el(`<div class="choices"></div>`); side.appendChild(ch);
+        shuffle([t, ...similar(t, 2)]).forEach(v => { const b = el(`<button class="ch wd" style="font-size:20px">${WU(v)}</button>`); b.onclick = () => { if (v === t) { b.classList.add('ok'); good(b, 2); mission('cart'); speak(`Yes! The total is ${W(t)}.`); setTimeout(draw, 2200); } else { b.classList.add('no'); oops(b, t, `The total is ${W(t)}.`); } }; ch.appendChild(b); });
+        $('.hint', side).style.visibility = 'hidden';
+      };
+    };
+    MK.onTap = (it, d) => {
+      if (total() + price(it) > 99999) return toast('Too much! 너무 비싸요', true);
+      MK.cart.push(it); SFX.register(); flyTo(d, '.cartlist', it.e, 1); speak(`${it.n}, ${W(price(it))}`); setTimeout(draw, 500);
+    };
+    draw();
+  },
+  maker(side, shelf) {
+    const draw = () => {
+      const it = MK.sel; if (!it) { side.innerHTML = `<div class="inst">PRICE MAKER ✏️<span class="ko">가격을 바꿀 상품을 눌러요. 내가 가게 주인!</span></div><div class="numiHost col" data-size="150">${numiFull(150)}</div><button class="btn white sm" id="rs">↺ 원래 가격으로</button>`; $('#rs', side).onclick = () => { S.prices = {}; save(); MK.drawShelf(); toast('가격 원래대로!'); }; return; }
+      let p = price(it); const dg = [Math.floor(p / 10000), Math.floor(p / 1000) % 10, Math.floor(p / 100) % 10];
+      const val = () => dg[0] * 10000 + dg[1] * 1000 + dg[2] * 100;
+      side.innerHTML = `<div class="row"><span style="font-size:80px">${it.e}</span><div class="inst" style="text-align:left;margin:0">Make a new price tag!<span class="ko">▲▼ 로 숫자를 바꿔요</span></div></div>
+        <div class="row">${['10,000', '1,000', '100'].map((l, i) => `<div class="dial"><button class="btn mint sm round" data-u="${i}">▲</button><div class="dg">${dg[i]}</div><button class="btn white sm round" data-d="${i}">▼</button><span class="hint">${l}</span></div>`).join('')}</div>
+        <div class="col"><div class="tag" style="font-size:50px;padding:4px 24px" id="np">${fmt(val())}</div><div class="hint" id="nw" style="text-transform:uppercase;font-size:22px;margin-top:6px">${WU(val())}</div></div>
+        <div class="row"><button class="btn sky sm" id="hr">🔊</button><button class="btn big" id="put">🏷️ PUT TAG</button></div>`;
+      const upd = () => { $$('.dg', side).forEach((d, i) => d.textContent = dg[i]); const v = val(); $('#np', side).textContent = fmt(v); $('#nw', side).textContent = v ? WU(v) : '—'; };
+      $$('[data-u]', side).forEach(b => b.onclick = () => { const i = +b.dataset.u; dg[i] = (dg[i] + 1) % 10; SFX.bounce(); upd(); });
+      $$('[data-d]', side).forEach(b => b.onclick = () => { const i = +b.dataset.d; dg[i] = (dg[i] + 9) % 10; SFX.bounce(); upd(); });
+      $('#hr', side).onclick = () => val() && speak(W(val()));
+      $('#put', side).onclick = () => { const v = val(); if (v < 100) return toast('100 이상으로 정해요', true); S.prices[it.id] = v; save(); MK.drawShelf(); SFX.register(); const d = prodEl(shelf, it); burst(d, 14); speak(`The ${it.n} is now ${W(v)}!`); };
+    };
+    MK.sel = null;
+    MK.onTap = (it, d) => { MK.sel = it; $$('.prod', shelf).forEach(x => x.classList.remove('sel')); d.classList.add('sel'); draw(); speak(`The ${it.n}. ${W(price(it))}.`); };
+    draw();
+  }
+};
+
+/* =========================================================
+   TOY SHOP
+   ========================================================= */
+const TOYS = [
+  { e: '🤖', n: 'robot', p: 15000 }, { e: '🦖', n: 'dinosaur', p: 7500 }, { e: '🧱', n: 'blocks', p: 9800 }, { e: '🎮', n: 'game', p: 48000 },
+  { e: '🪀', n: 'yo-yo', p: 900 }, { e: '🪁', n: 'kite', p: 3400 }, { e: '🚂', n: 'train', p: 21500 }, { e: '🪆', n: 'doll', p: 6700 },
+  { e: '🎲', n: 'dice', p: 1200 }, { e: '🛸', n: 'UFO', p: 33000 }, { e: '🏎️', n: 'race car', p: 5800 }, { e: '🦄', n: 'unicorn', p: 8000 }
+];
+const CUSTOMERS = [['🐰', 'Bunny'], ['🐻', 'Bear'], ['🐼', 'Panda'], ['🦊', 'Fox'], ['🐱', 'Kitty'], ['🐸', 'Froggy'], ['🐧', 'Penguin'], ['🐨', 'Koala'], ['🐶', 'Puppy']];
+SCREENS.toy = scr => {
+  setBg('bg-toy'); scr.classList.add('dark');
+  const cols = ['#ffd84d', '#ff7ac0', '#5cc8ff', '#3fe0b0', '#a98bff'];
+  scr.appendChild(el(`<div class="lights">${Array.from({ length: 18 }, (_, i) => `<i style="color:${cols[i % 5]};background:${cols[i % 5]};animation-delay:${i * .15}s"></i>`).join('')}</div>`));
+  header(scr, '🧸 TOY SHOP', { extra: '<button class="btn lav sm" id="np">🎲 NEW PRICES</button>' });
+  const body = el(`<div class="mbody" style="gap:12px"></div>`); scr.appendChild(body);
+  const prices = TOYS.map(t => t.p);
+  const shelf = el(`<div class="toyshelf"></div>`); body.appendChild(shelf);
+  const drawShelf = () => { shelf.innerHTML = ''; TOYS.forEach((t, i) => { const d = el(`<button class="toy"><span class="pe">${t.e}</span><span class="tag">${fmt(prices[i])}</span></button>`); d.onclick = () => speak(`The ${t.n} is ${W(prices[i])}.`); shelf.appendChild(d); }); };
+  drawShelf();
+  $('#np', scr).onclick = () => { TOYS.forEach((t, i) => prices[i] = randNum()); drawShelf(); SFX.whoosh(); toast('NEW PRICES!'); newCust(); };
+  const counter = el(`<div class="counter"><div class="custArea"></div><div class="desk"></div></div>`); body.appendChild(counter);
+  const ca = $('.custArea', counter), desk = $('.desk', counter);
+  let served = 0, miss = 0;
+  const newCust = () => {
+    const ti = rnd(0, TOYS.length - 1), toy = TOYS[ti], p = prices[ti], c = pick(CUSTOMERS);
+    $$('.toy', shelf).forEach((d, i) => d.classList.toggle('ask', i === ti));
+    ca.innerHTML = `<div class="bubble" style="color:var(--ink)">How much is this? <span style="font-size:36px">${toy.e}</span><span class="ko">이거 얼마예요?</span></div><div class="cust walkin">${c[0]}</div><div class="pill" style="font-size:18px;color:var(--ink)">${c[1]} · 💖 ${served}</div>`;
+    const sentence = `It's ${W(p)}.`;
+    desk.innerHTML = `<div class="inst" style="margin:0;color:var(--ink)">You are the shopkeeper! 🧑‍💼<span class="ko">가격표를 보고 알맞은 대답을 골라요 (또는 🎙️ 말로 대답하기)</span></div>
+      <div class="row" style="color:var(--ink)"><span style="font-size:60px">${toy.e}</span><span class="tag" style="font-size:46px;padding:4px 20px">${fmt(p)}</span></div>
+      <div class="choices" id="tc"></div>
+      <div class="row"><button class="btn sky sm" id="hq">🔊 손님 말 다시</button><button class="btn yel sm" id="ha">👂 모범 대답 듣기</button><button class="btn mint sm" id="sp">🎙️ 말로 대답하기</button></div>`;
+    const ask = () => speak('How much is this?', { rate: 1.05 });
+    $('#hq', desk).onclick = ask; $('#ha', desk).onclick = () => speak(sentence);
+    let lock = false;
+    const happy = from => {
+      lock = true; served++; mission('toy'); SFX.register();
+      $('.bubble', ca).innerHTML = `Thank you! Here you go! 💖<span class="ko">손님이 기뻐해요!</span>`;
+      burst(from, 22, ['💖', '🪙', '⭐', '✨']); addCoins(3, from); speak('Thank you! Here you go!');
+      setTimeout(() => { $('.cust', ca).classList.add('walkout'); }, 1600);
+      setTimeout(() => { if (served % 5 === 0) finish({ miss, title: 'BEST SHOPKEEPER!', back: newCust }); else newCust(); miss = 0; }, 2400);
+    };
+    shuffle([p, ...similar(p, 2)]).forEach(v => {
+      const b = el(`<button class="ch" style="font-size:24px;line-height:1.15">“It's ${W(v)}.”</button>`);
+      b.onclick = () => { if (lock) return; if (v === p) { b.classList.add('ok'); SFX.good(); speak(sentence); setTimeout(() => happy(b), 1800); } else { miss++; b.classList.add('no'); $('.bubble', ca).innerHTML = `Hmm? 🤔<span class="ko">가격표를 다시 볼까요?</span>`; oops(b, p, `Listen. ${sentence}`); } };
+      $('#tc', desk).appendChild(b);
+    });
+    $('#sp', desk).onclick = () => sayIt(p, ok => { if (ok && !lock) happy($('.cust', ca)); }, { sentence });
+    setTimeout(ask, 700);
+  };
+  newCust();
+};
+
+/* =========================================================
+   MISSION WORLD
+   ========================================================= */
+SCREENS.mission = scr => {
+  setBg('bg-mission'); header(scr, '🚀 MISSION WORLD'); misReset();
+  const body = el(`<div class="mbody" style="flex-direction:row;gap:18px"></div>`); scr.appendChild(body);
+  const list = el(`<div class="col grow" style="gap:10px;align-items:stretch;overflow:auto"><div class="inst" style="margin:0">TODAY'S MISSIONS<span class="ko">오늘의 미션 · 끝내면 🎁 보상을 받아요</span></div></div>`); body.appendChild(list);
+  MISSIONS.forEach(m => {
+    const p = S.mis.p[m.k] || 0, done = p >= m.n, claimed = S.mis.c[m.k];
+    const r = el(`<div class="mis"><span class="em">${m.em}</span><div class="tx">${m.t}<small>${m.ko} · ${p}/${m.n}</small><div class="bar"><i style="width:${p / m.n * 100}%"></i></div></div></div>`);
+    const b = claimed ? el(`<span style="font-size:40px">✅</span>`) : done ? el(`<button class="btn yel sm">🎁 GET!</button>`) : el(`<button class="btn sky sm">GO ▶</button>`);
+    b.onclick = () => { if (claimed) return; if (done) { S.mis.c[m.k] = 1; save(); SFX.chest(); addStars(1, b); addCoins(5, b); setTimeout(() => go('mission'), 1200); } else go(m.go); };
+    r.appendChild(b); list.appendChild(r);
+  });
+  const right = el(`<div class="col glass" style="width:38%;padding:18px;gap:12px;justify-content:center">
+     <div class="numiHost" data-size="150">${numiFull(150)}</div>
+     <div class="bubble">Ready for a QUICK QUEST?<span class="ko">5문제 빠른 퀘스트! 섞어서 나와요</span></div>
+     <button class="btn big" id="qq" style="margin-top:14px">⚡ QUICK QUEST</button></div>`);
+  body.appendChild(right);
+  $('#qq', right).onclick = () => go('quest');
+};
+/* shared mixed-question generator (used by Quick Quest + Boss) */
+function makeQ(type) {
+  const n = randNum();
+  type = type || pick(['listen', 'read', 'word', 'missing']);
+  if (type === 'listen') return { n, say: W(n), html: `<div class="inst" style="font-size:36px">🎧 Listen!<span class="ko">듣고 맞는 숫자를 골라요</span></div>`, ch: shuffle([n, ...similar(n, 3)]).map(v => ({ label: fmt(v), ok: v === n, big: 1 })) };
+  if (type === 'read') return { n, html: `<div class="inst">How do you say it?<span class="ko">숫자를 영어로 어떻게 읽나요?</span></div><div class="bignum" style="font-size:100px">${numHTML(n)}</div>`, ch: shuffle([n, ...similar(n, 2)]).map(v => ({ label: WU(v), ok: v === n })) };
+  if (type === 'word') return { n, html: `<div class="inst">Which number is it?<span class="ko">영어를 읽고 숫자를 골라요</span></div><div class="words">${words(n).map(w => `<span class="w">${w}</span>`).join('')}</div>`, ch: shuffle([n, ...similar(n, 3)]).map(v => ({ label: fmt(v), ok: v === n, big: 1 })) };
+  const ws = words(n), gi = ws.length - 1, ans = ws[gi];
+  const pool = ['hundred', 'thousand'].includes(ans) ? ['hundred', 'thousand'] : shuffle(ONES.slice(1, 10).filter(w => w !== ans)).slice(0, 2).concat(ans);
+  return { n, html: `<div class="inst">Missing word!<span class="ko">빈칸에 들어갈 단어는?</span></div><div class="bignum" style="font-size:90px">${numHTML(n)}</div><div class="words">${ws.map((w, i) => `<span class="w">${i === gi ? '_____' : w}</span>`).join('')}</div>`, ch: shuffle(pool).map(w => ({ label: w.toUpperCase(), ok: w === ans })) };
+}
+function askQ(host, q, onRight, onWrong) {
+  host.innerHTML = q.html; const ch = el(`<div class="choices" style="max-width:1000px;margin-top:10px"></div>`); host.appendChild(ch);
+  let lock = false;
+  q.ch.forEach(c => {
+    const b = el(`<button class="ch ${c.big ? '' : 'wd'}" style="${c.big ? 'font-size:44px' : ''}">${c.label}</button>`);
+    b.onclick = () => { if (lock) return; if (c.ok) { lock = true; b.classList.add('ok'); speak(W(q.n)); onRight(b); } else { b.classList.add('no'); oops(b, q.n); onWrong && onWrong(b); } };
+    ch.appendChild(b);
+  });
+  if (q.say) speak(q.say);
+}
+SCREENS.quest = scr => {
+  setBg('bg-mission'); header(scr, '⚡ QUICK QUEST', { back: () => go('mission') });
+  const body = el(`<div class="mbody col" style="justify-content:center"></div>`); scr.appendChild(body);
+  const dots = el(`<div class="dots" style="margin-bottom:10px">${'<i></i>'.repeat(5)}</div>`); body.appendChild(dots);
+  const host = el(`<div class="col glass" style="padding:20px 26px;width:100%;max-width:1100px"></div>`); body.appendChild(host);
+  const types = shuffle(['listen', 'read', 'word', 'missing', pick(['listen', 'read'])]); let r = 0, miss = 0;
+  const next = () => {
+    if (r >= 5) return finish({ miss, title: 'QUEST CLEAR!', coins: 5, again: () => go('quest'), back: () => go('mission') });
+    $$('i', dots).forEach((d, i) => d.classList.toggle('on', i < r));
+    askQ(host, makeQ(types[r]), b => { good(b); r++; setTimeout(next, 2200); }, () => miss++);
+  };
+  next();
+};
+
+/* =========================================================
+   MY COLLECTION
+   ========================================================= */
+let collTab = 'closet';
+SCREENS.coll = scr => {
+  setBg('bg-coll'); header(scr, '🎁 MY COLLECTION');
+  const body = el(`<div class="mbody"></div>`); scr.appendChild(body);
+  const tabs = el(`<div class="tabs">${[['closet', '👗 NUMI CLOSET'], ['stk', '🏆 STICKERS'], ['rec', '📊 MY RECORD']].map(t => `<button class="tab ${t[0] === collTab ? 'on' : ''}" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>`); body.appendChild(tabs);
+  tabs.onclick = e => { const t = e.target.closest('.tab'); if (t) { collTab = t.dataset.t; go('coll'); } };
+  const area = el(`<div class="grow" style="overflow:auto"></div>`); body.appendChild(area);
+  if (collTab === 'closet') {
+    const st = stage();
+    area.innerHTML = `<div class="row" style="align-items:stretch;gap:20px;height:100%">
+      <div class="col glass" style="padding:18px;width:36%;justify-content:center"><div class="numiHost" data-size="220">${numiFull(220)}</div><div class="platform"></div>
+      <div style="font-size:28px;font-weight:800">${st[1]} · LV ${level()}</div><div class="hint">${st[2]} · 다음 성장: ${(() => { const nx = STAGES.find(x => x[0] > level()); return nx ? 'LV ' + nx[0] : 'MAX ✨'; })()}</div></div>
+      <div class="grow glass" style="padding:16px"><div class="inst" style="margin:0 0 8px">🪙 코인으로 누미를 꾸며요!</div><div class="stk" id="acc"></div></div></div>`;
+    const g = $('#acc', area);
+    ACC.forEach(a => {
+      const own = S.owned.includes(a.id), wear = S.wear === a.id;
+      const b = el(`<button class="sk" style="${wear ? 'border-color:#ffbf1f;background:#fff6c4' : ''}">${a.e}<small>${a.name}<br>${own ? (wear ? '입는 중 ✔' : '입기') : '🪙 ' + a.price}</small></button>`);
+      b.onclick = () => {
+        if (own) { S.wear = wear ? '' : a.id; save(); SFX.sparkle(); go('coll'); }
+        else if (S.coins >= a.price) { S.coins -= a.price; S.owned.push(a.id); S.wear = a.id; save(); SFX.register(); burst(b, 24); speak('Wow! You look great!'); setTimeout(() => go('coll'), 900); }
+        else { oops(b, null); toast(`🪙 ${a.price - S.coins}개 더 필요해요`, true); }
+      };
+      g.appendChild(b);
+    });
+  } else if (collTab === 'stk') {
+    area.innerHTML = `<div class="inst" style="margin:0">🎯 ARCADE STICKERS<span class="ko">미니게임을 끝내면 스티커를 얻어요</span></div><div class="stk" id="g1"></div>
+      <div class="inst">✏️ SPELLING MEDALS</div><div class="stk" id="g2"></div>
+      <div class="inst">🐣 BOSS FRIENDS<span class="ko">보스를 물리치면 귀여운 친구가 와요</span></div><div class="stk" id="g3"></div>`;
+    GAMES.forEach((g, i) => $('#g1', area).appendChild(el(`<div class="sk ${S.stickers.includes('g' + i) ? '' : 'lock'}">${g.em}<small>${g.t}</small></div>`)));
+    SP_LV.forEach((l, i) => $('#g2', area).appendChild(el(`<div class="sk ${S.stickers.includes('sp' + (i + 1)) ? '' : 'lock'}">🏅<small>${l.t}</small></div>`)));
+    (S.creatures.length ? S.creatures : ['❔', '❔', '❔']).forEach(c => $('#g3', area).appendChild(el(`<div class="sk ${c === '❔' ? 'lock' : ''}">${c}</div>`)));
+  } else {
+    area.innerHTML = `<div class="row" style="gap:16px;margin-bottom:16px">${[['⭐', S.stars, 'STARS'], ['🪙', S.coins, 'COINS'], ['🏅', level(), 'LEVEL'], ['✅', S.correct, 'CORRECT'], ['🎴', Object.keys(S.seen).length, 'CARDS']].map(x => `<div class="sk" style="width:150px;aspect-ratio:auto;padding:12px">${x[0]}<b style="font-size:36px">${x[1]}</b><small>${x[2]}</small></div>`).join('')}</div>
+     <div class="glass" style="padding:16px">${DECKS.map(d => { const s = d.list.filter(n => S.seen[n]).length; return `<div class="mis" style="margin-bottom:8px"><span class="em">🪐</span><div class="tx">${d.name}<small>${d.ko} · ${s}/${d.list.length}</small><div class="bar"><i style="width:${s / d.list.length * 100}%"></i></div></div></div>`; }).join('')}</div>`;
+  }
+};
+/* =========================================================
+   NUMBER ARCADE — 15 mini games
+   ========================================================= */
+const LANE = i => `${6 + i * (88 / 5)}%`;
+const GAMES = [
+  { em: '🧺', t: 'NUMBER CATCHER', ko: '들리는 숫자 잡기', c: ['#ff7ac0', '#a98bff'], rounds: 6, run: gCatcher },
+  { em: '🔗', t: 'PRICE MATCH', ko: '숫자 ↔ 영어 연결', c: ['#ffd84d', '#ff9f3d'], rounds: 8, run: gMatch },
+  { em: '🧩', t: 'WORD PUZZLE', ko: '단어 조각 맞추기', c: ['#3fe0b0', '#29a8f0'], rounds: 5, run: gPuzzle },
+  { em: '👂', t: 'LISTEN & FIND', ko: '듣고 찾기', c: ['#a98bff', '#5cc8ff'], rounds: 6, run: gFind },
+  { em: '🫧', t: 'NUMBER BUBBLE', ko: '비눗방울 터뜨리기', c: ['#5cc8ff', '#b5e6ff'], rounds: 6, run: gBubble },
+  { em: '🏴‍☠️', t: 'TREASURE HUNT', ko: '보물상자 찾기', c: ['#ffbf1f', '#e07b39'], rounds: 5, run: gTreasure },
+  { em: '🏎️', t: 'NUMBER RACE', ko: '읽고 달리기', c: ['#ff5f7e', '#ff9f3d'], rounds: 6, run: gRace },
+  { em: '🚂', t: 'MISSING WORD', ko: '빠진 단어 찾기', c: ['#8ff5d2', '#22c493'], rounds: 6, run: gMissing },
+  { em: '🔍', t: 'PRICE DETECTIVE', ko: '틀린 가격표 고치기', c: ['#7a6bff', '#3b2a9b'], rounds: 4, run: gDetective },
+  { em: '🏭', t: 'NUMBER FACTORY', ko: '블록 조립 공장', c: ['#9aa0c8', '#5a6aa8'], rounds: 4, run: gFactory },
+  { em: '🎡', t: 'SPIN THE WHEEL', ko: '룰렛 돌리고 읽기', c: ['#ff9bd2', '#ffd84d'], rounds: 5, run: gWheel },
+  { em: '🃏', t: 'MEMORY CARDS', ko: '카드 짝 맞추기', c: ['#c3aeff', '#ff7ac0'], rounds: 4, run: gMemory },
+  { em: '📶', t: 'NUMBER SORTING', ko: '작은 수부터 정렬', c: ['#29a8f0', '#3fe0b0'], rounds: 3, run: gSort },
+  { em: '🧺', t: 'SHOPPING BASKET', ko: '가격 듣고 담기', c: ['#3fe0b0', '#ffd84d'], rounds: 5, run: gBasket },
+  { em: '👾', t: 'BOSS BATTLE', ko: '숫자 몬스터 변신시키기', c: ['#ff3fa4', '#6b2bd9'], rounds: 6, run: gBoss }
+];
+GAMES[13].em = '🛍️';
+
+SCREENS.arcade = scr => {
+  setBg('bg-arcade'); scr.classList.add('dark');
+  header(scr, '🕹️ NUMBER ARCADE');
+  const body = el(`<div class="mbody"></div>`); scr.appendChild(body);
+  const dsel = el(`<div class="tabs">${[[1, '⭐ 100 – 9,900'], [2, '⭐⭐ ~ 99,000'], [3, '⭐⭐⭐ 100 – 99,999']].map(d => `<button class="tab ${S.diff === d[0] ? 'on' : ''}" data-d="${d[0]}" style="color:var(--ink)">${d[1]}</button>`).join('')}</div>`);
+  dsel.onclick = e => { const t = e.target.closest('.tab'); if (!t) return; S.diff = +t.dataset.d; save(); go('arcade'); };
+  body.appendChild(dsel);
+  const g = el(`<div class="agrid"></div>`); body.appendChild(g);
+  GAMES.forEach((x, i) => {
+    const b = el(`<button class="ag" style="--t1:${x.c[0]};--t2:${x.c[1]}"><span class="num">${i + 1}</span><span class="st">${S.stickers.includes('g' + i) ? '🏆' : ''}</span><span class="em">${x.em}</span><b>${x.t}</b><span class="ko" style="font-size:14px;opacity:.9">${x.ko}</span></button>`);
+    b.onclick = () => go('game', i); g.appendChild(b);
+  });
+};
+SCREENS.game = (scr, i) => {
+  const g = GAMES[i]; setBg('bg-arcade'); scr.classList.add('dark');
+  header(scr, `${g.em} ${g.t}`, { back: () => go('arcade'), extra: `<div class="dots">${'<i></i>'.repeat(g.rounds)}</div>` });
+  const body = el(`<div class="mbody"></div>`); scr.appendChild(body);
+  const area = el(`<div class="gamearea"></div>`); body.appendChild(area);
+  const dots = $$('.dots i', scr);
+  const ctx = {
+    area, scr, round: 0, total: g.rounds, miss: 0, i,
+    ok(e, c = 1) { good(e, c); },
+    no(e, n, line) { this.miss++; oops(e, n, line); },
+    later(fn, ms) { const t = setTimeout(() => { if (cur === 'game') fn(); }, ms); cleanup.push(() => clearTimeout(t)); return t; },
+    every(fn, ms) { const t = setInterval(fn, ms); cleanup.push(() => clearInterval(t)); return t; },
+    step() { this.round++; dots.forEach((d, k) => d.classList.toggle('on', k < this.round)); if (this.round >= this.total) { this.later(() => this.end(), this.endDelay || 1400); return true; } return false; },
+    end() { mission('arcade'); finish({ miss: this.miss, sticker: 'g' + i, again: () => go('game', i), back: () => go('arcade'), title: pick(['GAME CLEAR!', 'YOU WIN!', 'FANTASTIC!']) }); }
+  };
+  g.run(ctx);
+};
+const topBar = (html) => el(`<div class="row" style="padding:10px;position:relative;z-index:5">${html}</div>`);
+
+/* 1. NUMBER CATCHER — hear it, catch it */
+function gCatcher(c) {
+  const a = c.area;
+  const round = () => {
+    a.innerHTML = ''; const n = randNum(), opts = shuffle([n, ...similar(n, 4)]);
+    const bar = topBar(`<button class="btn big" id="h">🔊 CATCH IT!</button><button class="btn white sm" id="peek">👀 힌트</button><span class="inst" id="pk" style="margin:0;text-transform:uppercase"></span>`); a.appendChild(bar);
+    $('#h', bar).onclick = () => speak(W(n)); $('#peek', bar).onclick = () => $('#pk', bar).textContent = W(n);
+    opts.forEach((v, i) => {
+      const f = el(`<button class="fall" style="left:${LANE(i)};animation-duration:${(S.calm ? 15 : 11) + rnd(0, 3)}s;animation-delay:-${rnd(0, 6)}s">${fmt(v)}</button>`);
+      f.onclick = () => {
+        if (v === n) { f.style.animationPlayState = 'paused'; good(f); speak(W(n)); if (!c.step()) c.later(round, 1600); }
+        else { c.no(f, n, `That's ${W(v)}. Catch ${W(n)}!`); }
+      };
+      a.appendChild(f);
+    });
+    c.later(() => speak(W(n)), 300);
+  };
+  a.appendChild(el(`<div class="col grow center"><div class="inst" style="font-size:40px">🧺 Listen and catch the number!<span class="ko">들리는 숫자를 눌러서 잡아요. 놓쳐도 다시 내려와요!</span></div></div>`));
+  c.later(round, 1500);
+}
+
+/* 2. PRICE MATCH — connect number ↔ words with a line */
+function gMatch(c) {
+  const a = c.area; a.classList.add('panel');
+  const set = () => {
+    a.innerHTML = `<div class="inst" style="margin:0">Connect the pairs! 🔗<span class="ko">숫자를 누르고 → 맞는 영어를 눌러 연결해요</span></div>`;
+    const wrap = el(`<div style="position:relative;flex:1;display:flex;justify-content:space-between;align-items:stretch;gap:20px;padding:10px 20px"><svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></svg></div>`); a.appendChild(wrap);
+    const svg = $('svg', wrap); const ns = nums(4);
+    const L = el(`<div class="col" style="gap:14px;justify-content:space-around;width:30%"></div>`), R = el(`<div class="col" style="gap:14px;justify-content:space-around;width:48%"></div>`);
+    wrap.append(L, R); let sel = null, done = 0;
+    ns.forEach(v => { const b = el(`<button class="ch" style="width:100%;font-size:40px">${fmt(v)}</button>`); b.v = v; b.onclick = () => { if (b.dataset.m) return; sel && sel.classList.remove('no'); $$('.ch', L).forEach(x => x.style.outline = ''); sel = b; b.style.outline = '5px solid #ffbf1f'; speak(W(v)); }; L.appendChild(b); });
+    shuffle(ns).forEach(v => {
+      const b = el(`<button class="ch wd" style="width:100%">${WU(v)}</button>`);
+      b.onclick = () => {
+        if (b.dataset.m) return; if (!sel) return toast('먼저 숫자를 골라요 👈', true);
+        if (sel.v === v) {
+          const wr = wrap.getBoundingClientRect(), r1 = sel.getBoundingClientRect(), r2 = b.getBoundingClientRect();
+          svg.insertAdjacentHTML('beforeend', `<line x1="${r1.right - wr.left}" y1="${r1.top + r1.height / 2 - wr.top}" x2="${r2.left - wr.left}" y2="${r2.top + r2.height / 2 - wr.top}" stroke="#ff7ac0" stroke-width="8" stroke-linecap="round" stroke-dasharray="4 14"/>`);
+          [sel, b].forEach(x => { x.dataset.m = 1; x.classList.add('ok'); x.style.outline = ''; });
+          good(b, 1, true); sel = null; done++;
+          if (!c.step() && done === 4) c.later(set, 1500);
+        } else { c.no(b, sel.v, `${W(sel.v)}`); }
+      };
+      R.appendChild(b);
+    });
+  };
+  set();
+}
+
+/* 3. WORD PUZZLE — drag word pieces into slots */
+function gPuzzle(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const n = randNum(), ws = words(n);
+    a.innerHTML = `<div class="inst" style="margin:0">Build the words! 🧩<span class="ko">단어 조각을 끌어서 빈칸에 순서대로 넣어요</span></div><div class="col"><div class="bignum" style="font-size:100px">${numHTML(n)}</div></div>`;
+    const slots = el(`<div class="slots">${ws.map(() => '<div class="slot"></div>').join('')}</div>`); a.appendChild(slots);
+    const tray = el(`<div class="row" style="margin-top:24px;gap:18px"></div>`); a.appendChild(tray);
+    const pieces = shuffle(ws.map((w, i) => ({ w, i })));
+    const sl = $$('.slot', slots); let filled = 0;
+    const place = (node, s) => { s.textContent = node.w; s.classList.add('fill'); s.dataset.f = 1; node.remove(); SFX.bounce(); speak(node.w); filled++; if (filled === ws.length) { good(slots); c.later(() => speak(W(n)), 500); if (!c.step()) c.later(round, 2400); } };
+    pieces.forEach((p, k) => {
+      const b = el(`<div class="blk" style="background:${['linear-gradient(160deg,#ff9bd2,#ff5fae)', 'linear-gradient(160deg,#c3aeff,#8c6bff)', 'linear-gradient(160deg,#9be0ff,#29a8f0)', 'linear-gradient(160deg,#8ff5d2,#22c493)'][k % 4]};text-transform:uppercase;font-size:30px;clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%,8% 50%);padding:14px 40px">${p.w}</div>`);
+      b.w = p.w; tray.appendChild(b);
+      draggable(b, {
+        targets: () => sl.filter(s => !s.dataset.f),
+        onDrop: (node, hit, moved) => {
+          const nextSlot = sl.find(s => !s.dataset.f), want = ws[sl.indexOf(nextSlot)];
+          const target = hit || (!moved ? sl.find(s => !s.dataset.f && ws[sl.indexOf(s)] === node.w) || nextSlot : null); if (!target) return false;
+          if (!target.dataset.f && ws[sl.indexOf(target)] === node.w) { place(node, target); return true; }
+          c.no(node, null); speak(`Next is ${want}`); return false;
+        }
+      });
+    });
+    speak(W(n));
+  };
+  round();
+}
+
+/* 4. LISTEN & FIND — six cards, one voice */
+function gFind(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const n = randNum(), opts = shuffle([n, ...similar(n, 5)]);
+    a.innerHTML = '';
+    const bar = topBar(`<button class="btn big sky" id="h">🔊 LISTEN</button><span class="inst" style="margin:0">Find the number!<span class="ko">듣고 맞는 카드를 눌러요</span></span>`); a.appendChild(bar);
+    $('#h', bar).onclick = () => speak(W(n));
+    const g = el(`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1;padding:10px"></div>`); a.appendChild(g);
+    opts.forEach((v, k) => {
+      const b = el(`<button class="ch" style="font-size:56px;animation:numPop .5s ${k * .08}s both">${fmt(v)}</button>`);
+      b.onclick = () => { if (g.dataset.d) return; if (v === n) { g.dataset.d = 1; b.classList.add('ok'); good(b); speak(W(n)); if (!c.step()) c.later(round, 1700); } else { b.classList.add('no'); c.no(b, n, `That's ${W(v)}. Listen: ${W(n)}`); } };
+      g.appendChild(b);
+    });
+    c.later(() => speak(W(n)), 400);
+  };
+  round();
+}
+
+/* 5. NUMBER BUBBLE — read words, pop the bubble */
+function gBubble(c) {
+  const a = c.area; a.style.background = 'linear-gradient(180deg,#7fd3ff,#b5e6ff 60%,#d6fff2)';
+  const round = () => {
+    const n = randNum(), opts = shuffle([n, ...similar(n, 4)]);
+    a.innerHTML = '';
+    const bar = topBar(`<div class="glass" style="padding:8px 20px;color:var(--ink)"><div class="ko hint">이 영어에 맞는 비눗방울을 터뜨려요 🫧</div><div style="font-size:32px;font-weight:800;text-transform:uppercase">${W(n)}</div></div><button class="btn white round" id="h">🔊</button>`); a.appendChild(bar);
+    $('#h', bar).onclick = () => speak(W(n));
+    opts.forEach((v, i) => {
+      const b = el(`<button class="bub" style="left:${LANE(i)};animation-duration:${(S.calm ? 18 : 14) + rnd(0, 4)}s;animation-delay:-${rnd(0, 8)}s">${fmt(v)}</button>`);
+      b.onclick = () => {
+        if (v === n) { SFX.bounce(); burst(b, 20, ['🫧', '✨', '💧']); b.style.visibility = 'hidden'; good(b, 1); speak(W(n)); if (!c.step()) c.later(round, 1600); }
+        else { c.no(b, n, `That's ${W(v)}.`); }
+      };
+      a.appendChild(b);
+    });
+  };
+  round();
+}
+
+/* 6. TREASURE HUNT — listen to the hint, open the chest */
+function gTreasure(c) {
+  const a = c.area; a.style.background = 'radial-gradient(ellipse at 50% 60%,#ffe9a6 0%,#f6cf7a 45%,#5cc8ff 46%,#2a93c9 100%)';
+  const round = () => {
+    const n = randNum(), opts = shuffle([n, ...similar(n, 5)]);
+    a.innerHTML = '';
+    const bar = topBar(`<button class="btn big yel" id="h">🔊 HINT</button><span class="inst" style="margin:0;color:#fff;text-shadow:0 2px 4px #0006">Where is the treasure?<span class="ko" style="color:#fff">힌트를 듣고 보물상자를 열어요</span></span>`); a.appendChild(bar);
+    const hint = `The treasure is in chest ${W(n)}!`;
+    $('#h', bar).onclick = () => speak(hint);
+    const g = el(`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:1;padding:10px 60px;align-items:center"></div>`); a.appendChild(g);
+    opts.forEach(v => {
+      const b = el(`<button class="chest" style="background:none"><span class="ce">🧰</span><span class="tag">${fmt(v)}</span></button>`);
+      b.onclick = () => {
+        if (g.dataset.d || b.dataset.o) return;
+        b.dataset.o = 1; b.classList.add('open');
+        if (v === n) { g.dataset.d = 1; $('.ce', b).textContent = '💎'; SFX.chest(); good(b, 3); speak(`You found it! ${W(n)}!`); if (!c.step()) c.later(round, 2000); }
+        else { $('.ce', b).textContent = '🕸️'; c.no(b, null); speak(`Not here! This is ${W(v)}.`); c.later(() => { $('.ce', b).textContent = '🧰'; b.classList.remove('open'); delete b.dataset.o; }, 1800); }
+      };
+      g.appendChild(b);
+    });
+    c.later(() => speak(hint), 400);
+  };
+  round();
+}
+
+/* 7. NUMBER RACE — read correctly, the car moves (timer optional) */
+function gRace(c) {
+  const a = c.area; a.classList.add('panel');
+  const top = el(`<div class="row" style="justify-content:space-between"><span class="hint">정답을 맞힐 때마다 자동차가 달려요! (시간 제한 없음)</span><button class="btn white sm" id="tm">⏱ 타이머 ${S.timer ? 'ON' : 'OFF'}</button></div>`); a.appendChild(top);
+  const track = el(`<div class="track"><span class="car">🏎️</span><span class="flag">🏁</span></div>`); a.appendChild(track);
+  const tbar = el(`<div class="prog" style="width:100%;height:12px;margin:8px 0;visibility:${S.timer ? 'visible' : 'hidden'}"><i style="width:100%;transition:none;background:linear-gradient(90deg,#ffd84d,#ff7ac0)"></i></div>`); a.appendChild(tbar);
+  const host = el(`<div class="col grow" style="justify-content:center"></div>`); a.appendChild(host);
+  let tId = null;
+  $('#tm', top).onclick = () => { S.timer = !S.timer; save(); $('#tm', top).textContent = `⏱ 타이머 ${S.timer ? 'ON' : 'OFF'}`; tbar.style.visibility = S.timer ? 'visible' : 'hidden'; };
+  const car = $('.car', track);
+  const round = () => {
+    const n = randNum(); clearInterval(tId);
+    host.innerHTML = `<div class="bignum" style="font-size:110px">${numHTML(n)}</div><div class="inst" style="margin:4px">How do you read it?<span class="ko">알맞은 영어를 고르거나 🎙️로 말해요</span></div>`;
+    const ch = el(`<div class="choices" style="max-width:1100px"></div>`); host.appendChild(ch);
+    let lock = false;
+    const win = b => { lock = true; clearInterval(tId); good(b); speak(W(n)); car.style.left = `calc(${(c.round + 1) / c.total * 82}% + 10px)`; SFX.whoosh(); if (!c.step()) c.later(round, 1800); };
+    shuffle([n, ...similar(n, 2)]).forEach(v => { const b = el(`<button class="ch wd">${WU(v)}</button>`); b.onclick = () => { if (lock) return; if (v === n) { b.classList.add('ok'); win(b); } else { b.classList.add('no'); c.no(b, n); } }; ch.appendChild(b); });
+    const sp = el(`<button class="btn mint" style="margin-top:12px">🎙️ SAY IT</button>`); sp.onclick = () => sayIt(n, ok => ok && !lock && win(sp)); host.appendChild(sp);
+    if (S.timer) { const i = $('i', tbar); let t = 100; i.style.width = '100%'; tId = c.every(() => { t -= 1; i.style.width = t + '%'; if (t <= 0) { clearInterval(tId); c.no(host, n); toast('⏱ 정답을 들어 봐요!', true); c.later(round, 2600); } }, 150); }
+  };
+  round();
+}
+
+/* 8. MISSING WORD — the word train */
+function gMissing(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const n = randNum(), ws = words(n), gi = rnd(0, ws.length - 1), ans = ws[gi];
+    const unit = ['hundred', 'thousand'].includes(ans);
+    const pool = unit ? ['hundred', 'thousand', 'million', 'ten'] : shuffle([...ONES.slice(1, 20), ...TENS.slice(2)].filter(w => w !== ans && !ans.includes(w))).slice(0, 3).concat(ans);
+    a.innerHTML = `<div class="inst" style="margin:0">Which word is missing? 🚂<span class="ko">기차 칸에 들어갈 단어를 골라요</span></div><div class="col"><div class="bignum" style="font-size:96px">${numHTML(n)}</div></div>`;
+    const train = el(`<div class="row" style="gap:6px;margin:12px 0"><span style="font-size:64px">🚂</span>${ws.map((w, i) => `<span class="w" style="border-radius:14px 14px 30px 30px;${i === gi ? 'background:#fff6c4;border:4px dashed #ffbf1f;min-width:150px' : ''}">${i === gi ? '?' : w}</span>`).join('')}</div>`); a.appendChild(train);
+    const ch = el(`<div class="choices" style="max-width:1000px;margin:0 auto"></div>`); a.appendChild(ch);
+    shuffle(pool).forEach(w => {
+      const b = el(`<button class="ch wd" style="font-size:30px">${w}</button>`);
+      b.onclick = () => { if (ch.dataset.d) return; if (w === ans) { ch.dataset.d = 1; b.classList.add('ok'); const s = $$('.w', train)[gi]; s.textContent = w; s.style.background = '#d4ffef'; good(b); SFX.whoosh(); speak(W(n), { chips: $$('.w', train) }); if (!c.step()) c.later(round, 2600); } else { b.classList.add('no'); c.no(b, n); } };
+      ch.appendChild(b);
+    });
+  };
+  round();
+}
+
+/* 9. PRICE DETECTIVE — find the wrong tag, then fix it */
+function gDetective(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const items = shuffle(ITEMS).slice(0, 4), ps = nums(4), bad = rnd(0, 3), wrong = similar(ps[bad], 1)[0];
+    a.innerHTML = `<div class="inst" style="margin:0">🔍 One price tag is WRONG!<span class="ko">영어 이름표와 숫자 가격표가 다른 상품을 찾아요</span></div>`;
+    const g = el(`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;flex:1;padding:8px"></div>`); a.appendChild(g);
+    const fix = el(`<div class="col" style="min-height:120px"></div>`); a.appendChild(fix);
+    let found = false;
+    items.forEach((it, k) => {
+      const shown = k === bad ? wrong : ps[k];
+      const b = el(`<button class="ch" style="display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:center"><span style="font-size:70px">${it.e}</span><span class="hint" style="font-size:17px;text-transform:uppercase;line-height:1.1">${W(ps[k])}</span><span class="tag">${fmt(shown)}</span></button>`);
+      b.onclick = () => {
+        if (found) return;
+        if (k === bad) {
+          found = true; b.classList.add('no'); SFX.sparkle(); speak(`Yes! This tag is wrong. It should be ${W(ps[k])}.`);
+          fix.innerHTML = `<div class="inst" style="margin:0">Fix it! 🛠️<span class="ko">올바른 가격표를 골라요</span></div>`;
+          const ch = el(`<div class="row"></div>`); fix.appendChild(ch);
+          shuffle([ps[k], wrong, similar(ps[k], 2).find(x => x !== wrong)]).forEach(v => {
+            const t = el(`<button class="tag" style="font-size:40px;padding:8px 24px">${fmt(v)}</button>`);
+            t.onclick = () => { if (v === ps[k]) { $('.tag', b).textContent = fmt(v); b.classList.remove('no'); b.classList.add('ok'); good(b, 2); fix.innerHTML = ''; if (!c.step()) c.later(round, 2000); } else { c.no(t, ps[k]); } };
+            ch.appendChild(t);
+          });
+        } else { c.no(b, null); speak(`This one is OK. ${W(ps[k])}.`); }
+      };
+      g.appendChild(b);
+    });
+  };
+  round();
+}
+
+/* 10. NUMBER FACTORY — press machines to drop place-value blocks */
+function gFactory(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const places = S.diff >= 3 ? [10000, 1000, 100, 10, 1] : S.diff === 2 ? [10000, 1000, 100] : [1000, 100];
+    let n; do { n = randNum(); } while (n >= places[0] * 10 || (S.diff < 3 && n % 100));
+    const made = [];
+    a.innerHTML = `<div class="inst" style="margin:0">🏭 ORDER: <b style="text-transform:uppercase;color:#ff5fae">${W(n)}</b><span class="ko">기계 버튼을 눌러 블록을 만들고 📦 상자에 담아 보내요</span></div>`;
+    const mach = el(`<div class="row"></div>`); a.appendChild(mach);
+    const conv = el(`<div class="conv" style="margin:12px 0"></div>`); a.appendChild(conv);
+    const info = el(`<div class="row"><span class="hint" style="font-size:26px" id="cnt">0</span><button class="btn white sm" id="un">⏪ UNDO</button><button class="btn sky sm" id="h">🔊</button><button class="btn mint big" id="ship">📦 SHIP IT!</button></div>`); a.appendChild(info);
+    const sum = () => made.reduce((x, y) => x + y, 0);
+    const size = v => v >= 10000 ? [70, 70] : v >= 1000 ? [52, 52] : v >= 100 ? [52, 16] : v >= 10 ? [10, 40] : [12, 12];
+    const draw = () => { conv.innerHTML = ''; made.forEach(v => { const [w, h] = size(v); conv.appendChild(el(`<i class="cube" style="width:${w}px;height:${h}px;background:${blkColor(v)}"></i>`)); }); $('#cnt', info).textContent = `지금: ${fmt(sum())}`; };
+    places.forEach(p => { const b = el(`<button class="btn" style="background:${blkColor(p)};box-shadow:0 7px 0 rgba(0,0,0,.25)">⚙️ +${fmt(p)}</button>`); b.onclick = () => { if (made.filter(x => x === p).length >= 9) return toast('9개까지만!', true); made.push(p); made.sort((x, y) => y - x); SFX.bounce(); draw(); }; mach.appendChild(b); });
+    $('#un', info).onclick = () => { made.pop(); draw(); };
+    $('#h', info).onclick = () => speak(W(n));
+    $('#ship', info).onclick = () => {
+      if (sum() === n) { SFX.register(); good(conv, 2); speak(`${W(n)}! Shipped!`); conv.animate([{ transform: 'none' }, { transform: 'translateX(120%)' }], { duration: 900, fill: 'forwards' }); if (!c.step()) c.later(round, 2000); }
+      else c.no(conv, n, `You made ${W(sum() || 0)}. The order is ${W(n)}.`);
+    };
+    draw(); speak(W(n));
+  };
+  round();
+}
+
+/* 11. SPIN THE WHEEL */
+function gWheel(c) {
+  const a = c.area; a.classList.add('panel');
+  a.innerHTML = '';
+  const wrap = el(`<div class="row grow" style="gap:30px;flex-wrap:nowrap"></div>`); a.appendChild(wrap);
+  const wheel = el(`<div class="wheel"><span class="pin">🔻</span></div>`); wrap.appendChild(wheel);
+  const right = el(`<div class="col grow" style="gap:12px"></div>`); wrap.appendChild(right);
+  let rot = 0, segs = [];
+  const cols = ['#ff9bd2', '#c3aeff', '#9be0ff', '#8ff5d2', '#ffe27a', '#ffb3dc', '#b5e6ff', '#d6c8ff'];
+  const build = () => {
+    segs = nums(8); let p = '';
+    segs.forEach((v, i) => {
+      const a0 = (i * 45 - 90) * Math.PI / 180, a1 = ((i + 1) * 45 - 90) * Math.PI / 180, m = i * 45 + 22.5;
+      p += `<path d="M100 100 L${100 + 95 * Math.cos(a0)} ${100 + 95 * Math.sin(a0)} A95 95 0 0 1 ${100 + 95 * Math.cos(a1)} ${100 + 95 * Math.sin(a1)} Z" fill="${cols[i]}" stroke="#fff" stroke-width="2"/>
+      <text transform="rotate(${m} 100 100) translate(100 ${100 - 62}) rotate(90)" text-anchor="middle" dominant-baseline="middle" font-size="${v >= 10000 ? 13 : 15}" font-weight="800" fill="#3a2770" font-family="Baloo 2,sans-serif">${fmt(v)}</text>`;
+    });
+    const old = $('svg', wheel); old && old.remove();
+    wheel.insertAdjacentHTML('beforeend', `<svg viewBox="0 0 200 200" style="transform:rotate(${rot}deg)"><circle cx="100" cy="100" r="98" fill="#fff"/>${p}<circle cx="100" cy="100" r="16" fill="#ffd84d" stroke="#fff" stroke-width="4"/></svg>`);
+  };
+  const ready = () => {
+    right.innerHTML = `<div class="inst" style="font-size:36px">Spin the wheel! 🎡<span class="ko">룰렛을 돌리고 나온 숫자를 읽어요</span></div>`;
+    const b = el(`<button class="btn big">🎡 SPIN!</button>`); right.appendChild(b);
+    b.onclick = () => {
+      b.disabled = true; const k = rnd(0, 7); const curMod = ((rot % 360) + 360) % 360;
+      rot += 360 * 4 + ((360 - (k * 45 + 22.5)) - curMod + 360) % 360; $('svg', wheel).style.transform = `rotate(${rot}deg)`;
+      for (let i = 0; i < 14; i++) setTimeout(() => tone(900 + i * 20, .03, 'square', .05), i * i * 14);
+      c.later(() => ask(segs[k]), 3300);
+    };
+  };
+  const ask = n => {
+    SFX.sparkle(); burst(wheel, 12);
+    right.innerHTML = `<div class="bignum" style="font-size:100px">${numHTML(n)}</div><div class="inst" style="margin:0">Read it!<span class="ko">어떻게 읽을까요?</span></div>`;
+    const ch = el(`<div class="choices"></div>`); right.appendChild(ch); let lock = false;
+    const win = b => { lock = true; good(b); speak(W(n)); if (!c.step()) c.later(() => { build(); ready(); }, 2000); };
+    shuffle([n, ...similar(n, 2)]).forEach(v => { const b = el(`<button class="ch wd" style="font-size:20px">${WU(v)}</button>`); b.onclick = () => { if (lock) return; if (v === n) { b.classList.add('ok'); win(b); } else { b.classList.add('no'); c.no(b, n); } }; ch.appendChild(b); });
+    const sp = el(`<button class="btn mint sm">🎙️ SAY IT</button>`); sp.onclick = () => sayIt(n, ok => ok && !lock && win(sp)); right.appendChild(sp);
+  };
+  build(); ready();
+}
+
+/* 12. MEMORY CARDS */
+function gMemory(c) {
+  const a = c.area; a.classList.add('panel');
+  a.innerHTML = `<div class="inst" style="margin:0">Find the pairs! 🃏<span class="ko">숫자 카드와 영어 카드의 짝을 찾아요</span></div>`;
+  const g = el(`<div class="mem"></div>`); a.appendChild(g);
+  const ns = nums(4); const cards = shuffle([...ns.map(v => ({ v, t: 'n' })), ...ns.map(v => ({ v, t: 'w' }))]);
+  let open = [], busy = false;
+  cards.forEach(cd => {
+    const d = el(`<div class="mc"><div class="in"><div class="fa">❔</div><div class="ba ${cd.t === 'w' ? 'wd' : ''}">${cd.t === 'n' ? fmt(cd.v) : WU(cd.v)}</div></div></div>`); d.cd = cd;
+    d.onclick = () => {
+      if (busy || d.classList.contains('f')) return; SFX.pop(); d.classList.add('f'); speak(W(cd.v)); open.push(d);
+      if (open.length === 2) {
+        busy = true; const [x, y] = open;
+        if (x.cd.v === y.cd.v) { c.later(() => { x.classList.add('m'); y.classList.add('m'); good(y, 1, true); open = []; busy = false; c.step(); }, 700); }
+        else { if (open.length) c.miss += .5; c.later(() => { SFX.bad(); x.classList.remove('f'); y.classList.remove('f'); open = []; busy = false; }, 1400); }
+      }
+    };
+    g.appendChild(d);
+  });
+}
+
+/* 13. NUMBER SORTING */
+function gSort(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const ns = shuffle(c.round === 0 ? [700, 7000, 5080, 5800, 1000] : nums(5)), sorted = [...ns].sort((x, y) => x - y);
+    let k = 0;
+    a.innerHTML = `<div class="inst">Smallest to biggest! 📶<span class="ko">가장 작은 수부터 차례로 눌러요</span></div>`;
+    const top = el(`<div class="row" style="gap:16px"></div>`); a.appendChild(top);
+    const steps = el(`<div class="row" style="align-items:flex-end;gap:10px;margin-top:30px;flex:1">${sorted.map((_, i) => `<div class="slot" style="height:${70 + i * 30}px;min-width:150px;align-items:flex-start;padding-top:8px"></div>`).join('')}</div>`); a.appendChild(steps);
+    ns.forEach(v => {
+      const b = el(`<button class="ch" style="font-size:40px;min-width:160px">${fmt(v)}</button>`);
+      b.onclick = () => {
+        if (v === sorted[k]) { const s = $$('.slot', steps)[k]; s.textContent = fmt(v); s.classList.add('fill'); b.style.visibility = 'hidden'; SFX.bounce(); speak(W(v)); k++; if (k === 5) { good(steps); c.later(() => speak(sorted.map(W).join(', ')), 800); if (!c.step()) c.later(round, 6500); } }
+        else { c.no(b, null); speak(`Find the smallest number!`); }
+      };
+      top.appendChild(b);
+    });
+  };
+  round();
+}
+
+/* 14. SHOPPING BASKET — hear a price, drag the item into the basket */
+function gBasket(c) {
+  const a = c.area; a.classList.add('panel');
+  const round = () => {
+    const items = shuffle(ITEMS).slice(0, 6), ps = nums(6), ti = rnd(0, 5), n = ps[ti];
+    const say = `Put the item for ${W(n)} in the basket!`;
+    a.innerHTML = '';
+    const bar = topBar(`<button class="btn big sky" id="h">🔊 LISTEN</button><span class="inst" style="margin:0">Drag it to the basket!<span class="ko">들리는 가격의 상품을 바구니로 끌어 와요</span></span>`); a.appendChild(bar);
+    $('#h', bar).onclick = () => speak(say);
+    const row = el(`<div class="row grow" style="gap:30px;flex-wrap:nowrap"></div>`); a.appendChild(row);
+    const g = el(`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1"></div>`); row.appendChild(g);
+    const basket = el(`<div class="basket">🧺</div>`); row.appendChild(basket);
+    items.forEach((it, k) => {
+      const d = el(`<div class="prod" style="background:#fff;border-radius:24px;box-shadow:0 6px 0 #e3d4ff;padding:10px;cursor:grab"><span class="pe">${it.e}</span><span class="tag">${fmt(ps[k])}</span></div>`); g.appendChild(d);
+      draggable(d, {
+        targets: () => [basket],
+        onDrop: (node, hit, moved) => {
+          if (!hit && moved) return false;
+          if (k === ti) { node.dataset.lock = 1; node.style.visibility = 'hidden'; basket.textContent = '🧺' + it.e; SFX.register(); good(basket); speak(`Yes! The ${it.n}. ${W(n)}.`); if (!c.step()) c.later(round, 2200); return true; }
+          c.no(node, null); speak(`That's ${W(ps[k])}. We need ${W(n)}.`); return false;
+        }
+      });
+    });
+    c.later(() => speak(say), 400);
+  };
+  round();
+}
+
+/* 15. BOSS BATTLE */
+function gBoss(c) {
+  const a = c.area; a.classList.add('panel');
+  const boss = pick(['👾', '👹', '🦑', '🐙', '🦖']), friend = pick(['🐣', '🦄', '🐰', '🐬', '🐥', '🐼', '🦋', '🐹']);
+  let hp = c.total; c.endDelay = 5200;
+  a.innerHTML = '';
+  const top = el(`<div class="row" style="gap:30px;flex-wrap:nowrap"><div class="col"><div class="monster">${boss}</div><div class="hp"></div></div><div class="bubble" id="bb" style="max-width:420px">GRRR! I am the NUMBER MONSTER!<span class="ko">숫자 문제를 맞혀서 몬스터를 변신시켜요!</span></div></div>`); a.appendChild(top);
+  const host = el(`<div class="col grow" style="justify-content:center"></div>`); a.appendChild(host);
+  const mon = $('.monster', top), hpEl = $('.hp', top);
+  const drawHP = () => hpEl.innerHTML = Array.from({ length: c.total }, (_, i) => i < hp ? '💜' : '🤍').join('');
+  drawHP(); SFX.boss(); speak('Grrr! I am the number monster!');
+  const types = ['listen', 'read', 'word', 'missing', 'listen', 'read'];
+  const next = () => {
+    askQ(host, makeQ(types[c.total - hp]), b => {
+      good(b, 2, true); hp--; drawHP(); mon.classList.remove('hit'); void mon.offsetWidth; mon.classList.add('hit'); burst(mon, 16, ['💥', '⭐', '✨']);
+      $('#bb', top).innerHTML = hp ? pick(['Ouch!', 'Oh no!', 'Wow, you are good!']) : '...';
+      c.step();
+      if (hp > 0) c.later(next, 2000);
+      else c.later(() => {
+        host.innerHTML = ''; SFX.level(); burst(mon, 50, ['✨', '💖', '🌟', '🌈']);
+        mon.animate([{ transform: 'scale(1) rotate(0)' }, { transform: 'scale(.1) rotate(720deg)', filter: 'brightness(3)' }, { transform: 'scale(1.2) rotate(720deg)' }, { transform: 'scale(1)' }], { duration: 1600 });
+        setTimeout(() => { mon.textContent = friend; mon.style.filter = 'drop-shadow(0 0 30px #ffe680)'; }, 800);
+        $('#bb', top).innerHTML = `Thank you! I'm your friend now! 💖<span class="ko">몬스터가 귀여운 친구가 되었어요!</span>`;
+        speak("Thank you! I'm your friend now!");
+        if (!S.creatures.includes(friend)) { S.creatures.push(friend); save(); }
+      }, 1200);
+    }, () => { mon.classList.remove('laugh'); void mon.offsetWidth; mon.classList.add('laugh'); SFX.boss(); $('#bb', top).innerHTML = `Ha ha! Listen again!<span class="ko">괜찮아요! 정답을 듣고 다시!</span>`; });
+  };
+  c.later(next, 1800);
+}
+
+/* =========================================================
+   boot
+   ========================================================= */
+(function boot() {
+  const bg = $('#bg');
+  ['⭐', '✨', '🌟', '💫', '✦'].forEach((s, k) => { for (let i = 0; i < 4; i++) bg.appendChild(el(`<span class="tw" style="left:${rnd(2, 96)}%;top:${rnd(2, 94)}%;animation-delay:-${rnd(0, 30) / 10}s;font-size:${rnd(14, 28)}px">${s}</span>`)); });
+  misReset(); save();
+  document.body.classList.toggle('calm', S.calm);
+  go('map');
+  // first-touch splash: unlocks audio + speech on iPad
+  modal(`<div class="numiHost" data-size="170" style="display:inline-block">${numiFull(170)}</div>
+   <h3 style="font-size:46px;background:linear-gradient(90deg,#ff5fae,#a079ff,#3fb8ff);-webkit-background-clip:text;background-clip:text;color:transparent">SUPER NUMBER WORLD!</h3>
+   <div class="inst">Hi, I'm NUMI! 👋<span class="ko">소리를 켜고 시작해요 🔊 (태블릿은 가로로!)</span></div>
+   <button class="btn big mint" data-close style="font-size:40px">▶ START!</button>`, () => { ac(); SFX.level(); loadVoices(); speak("Hi! I'm Numi! Let's go!"); });
+})();
+
+</script>
+</body>
+</html>
